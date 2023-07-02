@@ -1,9 +1,12 @@
-const mongoose = require('mongoose')
+import { connect } from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config({ path: './config.env' });
 
 const connection_string = process.env.CONNECTION_STRING
-mongoose.connect(connection_string).then(()=>{
+connect(connection_string).then(()=>{
     console.log("Connected successfully");
-}).catch(()=>{
+}).catch((error)=>{
     console.log("connection error");
+    console.log(error)
 })
 
