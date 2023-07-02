@@ -1,6 +1,7 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Dashboard from "./Components/Dashboard/Dashboard.tsx";
+import Login from "./Pages/Login/Login.tsx";
 import { ThemeContext } from "./ThemeContext";
 import { useContext } from "react";
 import Navbar from "./Components/Navbar/Navbar.tsx";
@@ -16,9 +17,10 @@ function App() {
       }}
     >
       <Router>
-        <Navbar />
+        {localStorage.getItem("apiKey") && <Navbar />}
         <Routes>
           <Route exact path="/" element={<Dashboard />} />
+          <Route exact path="/login" element={<Login />} />
         </Routes>
       </Router>
     </div>
