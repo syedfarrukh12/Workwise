@@ -95,7 +95,7 @@ export const login = (req, res, next) => {
         }
 
         if (result) {
-          res.status(200).send("Logging you in");
+          res.status(200).json(user);
         } else {
           res.status(401).send("Invalid password");
         }
@@ -134,7 +134,7 @@ export const deleteUser = (req, res, next) => {
       if (!deletedUser) {
         return res.status(404).send("User not found");
       }
-      res.status(200).json("Account successfully deleted");
+      res.status(200).json({ message: "Account successfully deleted" });
     })
     .catch((error) => {
       console.error(error);
