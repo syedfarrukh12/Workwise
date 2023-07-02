@@ -6,7 +6,7 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import { NavLink } from "react-router-dom";
 
 function Navbar() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme, toggleTheme } = useContext<any>(ThemeContext);
   const [currentTheme, setCurrentTheme] = useState(theme);
 
   const handleThemeToggle = () => {
@@ -20,7 +20,7 @@ function Navbar() {
     <>
       <div>
         <div
-          className="flex align-middle justify-between flex-row p-5 shadow-lg"
+          className="flex align-middle justify-between flex-row px-5 py-2 shadow-lg"
           style={{ backgroundColor: "rgba(1,1,1,0.3)" }}
         >
           <div

@@ -2,8 +2,8 @@ import React from 'react'
 
 const Dashboard = () => {
   return (
-    <div className=''>
-      <div>This is dashboard page for <code className=''>workwise</code></div>
+    <div className='p-4'>
+      
     </div>
   );
 };
