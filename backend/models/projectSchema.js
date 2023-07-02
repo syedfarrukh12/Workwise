@@ -11,6 +11,7 @@ const projectSchema = new Schema({
     ref: "User",
     required: true,
   },
+  createdAt: { type: Date, default: Date.now() },
 });
 
 const Project = model("Project", projectSchema);
