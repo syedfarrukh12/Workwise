@@ -1,21 +1,19 @@
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
+import {
+  getUsers,
+  getUser,
+  createUser,
+  login,
+  updateUser,
+  deleteUser
+} from "../../controllers/UserControllers/userController.js";
+const router = Router();
 
-//Get all users
-router.get("/users", function (req, res, next) {
-  res.send("all Users");
-});
+router.get("/users", getUsers);
+router.get("/users/:id", getUser);
+router.post("/signup", createUser);
+router.post("/login", login);
+router.put("/user", updateUser);
+router.delete("/user/:id", deleteUser);
 
-//Get single user
-router.get("/users/:id", function (req, res, next) {
-  res.send("Signle user");
-});
-
-//create user
-router.post("/user", function (req, res, next) {
-  const { name, email, password, role } = req.body;
-  console.log(name, email, password, role);
-  res.status(200).send("Got it successfully");
-});
-
-module.exports = router;
+export default router;

@@ -1,8 +1,9 @@
-const express = require("express");
+import express from "express";
+
 const router = express.Router();
 
 router.get("/dashboard", function (req, res, next) {
   res.send("dashboard Router");
 });
 
-module.exports = router;
+export default router;
