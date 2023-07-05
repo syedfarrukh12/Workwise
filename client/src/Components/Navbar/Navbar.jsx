@@ -42,7 +42,7 @@ function Navbar({ setIsLoggedIn }) {
     <>
       <div>
         <div
-          className="flex items-center align-middle justify-between flex-row px-5 py-2 shadow-lg"
+          className="flex items-center align-middle justify-between flex-row px-5 py-2 shadow-lg z-50"
           style={{ backgroundColor: "rgba(1,1,1,0.3)" }}
         >
           <NavLink
@@ -64,7 +64,7 @@ function Navbar({ setIsLoggedIn }) {
             {/* <NavLink to="/" className="cursor-pointer">
               About
             </NavLink> */}
-            <div className="flex items-center">
+            <div className="items-center hidden sm:flex">
               <LightModeIcon />
               <Switch
                 onChange={handleThemeToggle}
@@ -100,6 +100,16 @@ function Navbar({ setIsLoggedIn }) {
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                <MenuItem>
+                  <div className="items-center flex sm:hidden">
+                    <LightModeIcon />
+                    <Switch
+                      onChange={handleThemeToggle}
+                      defaultChecked={currentTheme === "dark"}
+                    />
+                    <DarkModeIcon />
+                  </div>
+                </MenuItem>
               </Menu>
             </div>
           </div>

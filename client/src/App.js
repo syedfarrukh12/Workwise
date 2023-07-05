@@ -1,18 +1,17 @@
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Dashboard from "./Components/Dashboard/Dashboard.jsx";
-import Login from "./Pages/Login/Login.jsx";
+import { BrowserRouter as Router } from "react-router-dom";
 import { ThemeContext } from "./ThemeContext";
-import { useContext, useEffect, useState } from "react";
+import { Suspense, useContext, useState } from "react";
 import Navbar from "./Components/Navbar/Navbar.jsx";
-import Signup from "./Pages/signup/Signup";
+import AppRoutes from "./utils/AppRoutes";
+import { LinearProgress } from "@mui/material";
 
 function App() {
   const { theme } = useContext(ThemeContext);
   const [isLoggedIn, setIsLoggedIn] = useState(
     !!localStorage.getItem("apiKey")
   );
- 
+
   return (
     <div
       style={{
@@ -23,19 +22,9 @@ function App() {
     >
       <Router>
         {isLoggedIn && <Navbar setIsLoggedIn={setIsLoggedIn} />}
-        <Routes>
-          <Route exact path="/" element={<Dashboard />} />
-          <Route
-            exact
-            path="/login"
-            element={<Login setIsLoggedIn={setIsLoggedIn} />}
-          />
-          <Route
-            exact
-            path="/signup"
-            element={<Signup setIsLoggedIn={setIsLoggedIn} />}
-          />
-        </Routes>
+        <Suspense fallback={<LinearProgress />}>
+          <AppRoutes setIsLoggedIn={setIsLoggedIn} />
+        </Suspense>
       </Router>
     </div>
   );

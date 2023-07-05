@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button, TextField } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Alert, Button, Snackbar, TextField } from "@mui/material";
 import axios from "axios";
 import { API_URL } from "../../Components/Common/apiConfig.js";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,7 +12,13 @@ import { isValidEmail } from "../../Components/utils.js";
 const Signup = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [open, setOpen] = useState(false);
+  const [snackbarContent, setSnackbarContent] = useState({
+    type: "",
+    content: "",
+  });
   const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   // const [usernameError, setUsernameError] = useState("");
   const [user, setUser] = useState({
     name: "",
@@ -22,10 +28,22 @@ const Signup = ({ setIsLoggedIn }) => {
     role: "",
   });
 
+  useEffect(() => {
+    if (localStorage.getItem("apiKey")) {
+      navigate("/");
+    }
+    //eslint-disable-next-line
+  }, []);
+
   const handleSignup = () => {
     if (user.password === confirmPassword) {
       if (!isValidEmail(user.email)) {
         return setEmailError("Email is invalid");
+      }
+      if (user.password.length < 8) {
+        return setPasswordError(
+          "Password must be at least eight characters long"
+        );
       }
       axios
         .post(`${API_URL}/signup`, user)
@@ -37,15 +55,44 @@ const Signup = ({ setIsLoggedIn }) => {
         })
         .catch((error) => {
           console.log(error);
+          setSnackbarContent({ type: "error", content: error.response.data });
+          setOpen(true);
         });
+    } else {
+      return setPasswordError("Passwords do not match");
     }
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   };
 
   return (
     <>
       <div>
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+        >
+          <Alert
+            onClose={handleClose}
+            severity={snackbarContent.type}
+            sx={{ width: "100%" }}
+          >
+            {snackbarContent.content}
+          </Alert>
+        </Snackbar>
         <div className="flex justify-center items-center h-screen">
-          <div style={{backgroundColor: 'rgba(0,0,0,0.1)'}} className="m-16 w-full justify-center py-24 flex rounded-xl">
+          <div
+            style={{ backgroundColor: "rgba(0,0,0,0.05)" }}
+            className="m-16 w-full justify-center lg:py-24 flex rounded-xl"
+          >
             <div className="w-96 rounded-xl space-y-4 p-5 flex flex-col">
               <div className="text-5xl text-center py-5 text">
                 <code>Workwise</code>
@@ -53,6 +100,7 @@ const Signup = ({ setIsLoggedIn }) => {
               <TextField
                 id="outlined-basic"
                 label="Name"
+                required={true}
                 size="small"
                 variant="outlined"
                 onChange={(e) => {
@@ -67,10 +115,12 @@ const Signup = ({ setIsLoggedIn }) => {
                 label="Username"
                 size="small"
                 variant="outlined"
+                value={user.username}
+                required={true}
                 onChange={(e) => {
                   setUser((prevUser) => ({
                     ...prevUser,
-                    username: e.target.value,
+                    username: e.target.value.toLowerCase(),
                   }));
                 }}
               />
@@ -80,6 +130,7 @@ const Signup = ({ setIsLoggedIn }) => {
                 size="small"
                 error={!!emailError && emailError}
                 type="email"
+                required={true}
                 variant="outlined"
                 onChange={(e) => {
                   setUser((prevUser) => ({
@@ -88,39 +139,46 @@ const Signup = ({ setIsLoggedIn }) => {
                   }));
                   setEmailError("");
                 }}
+                helperText={emailError}
               />
-              {!!emailError && (
-                <span className="text-sm ml-2 text-red-500">{emailError}</span>
-              )}
               <TextField
                 id="outlined-basic"
                 label="Password"
                 type="password"
                 size="small"
+                error={!!passwordError}
+                required={true}
                 variant="outlined"
                 onChange={(e) => {
                   setUser((prevUser) => ({
                     ...prevUser,
                     password: e.target.value,
                   }));
+                  setPasswordError('')
                 }}
+                helperText={passwordError}
               />
               <TextField
                 id="outlined-basic"
                 label="Confirm Password"
                 type="password"
+                required={true}
                 size="small"
                 variant="outlined"
                 onChange={(e) => {
                   setConfirmPassword(e.target.value);
+                  setPasswordError('')
                 }}
               />
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                <InputLabel size="small" id="demo-simple-select-label">
+                  Role
+                </InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={user.role}
+                  required={true}
                   size="small"
                   label="Role"
                   onChange={(e) => {
@@ -140,7 +198,10 @@ const Signup = ({ setIsLoggedIn }) => {
               </Button>
               <div>
                 Already have account?{" "}
-                <Link className="text-blue-500 underline hover:text-blue-800" to="/login">
+                <Link
+                  className="text-blue-500 underline hover:text-blue-800"
+                  to="/login"
+                >
                   Log in
                 </Link>
               </div>
