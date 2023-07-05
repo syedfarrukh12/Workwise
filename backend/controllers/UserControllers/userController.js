@@ -18,7 +18,7 @@ export const getUser = async (req, res, next) => {
   User.findById(id)
     .then((user) => {
       if (!user) {
-        res.status(404).send("User not found");
+        res.status(404).json("User not found");
       } else {
         res.status(200).json(user);
       }
@@ -49,7 +49,7 @@ export const createUser = async (req, res, next) => {
 
       const newUser = new User({
         name,
-        username,
+        username: username.toLowerCase(),
         email,
         password: hash,
         role,
@@ -63,14 +63,14 @@ export const createUser = async (req, res, next) => {
         .catch((error) => {
           console.error(error);
           if (error.code === 11000 && error.keyValue && error.keyValue.email) {
-            res.status(400).send("Email already exists");
+            res.status(400).json("Email already exists");
           }
           if (
             error.code === 11000 &&
             error.keyValue &&
             error.keyValue.username
           ) {
-            res.status(400).send("Username already exists");
+            res.status(400).json("Username already exists");
           } else {
             res.status(500).send("An error occurred while creating the user");
           }
@@ -85,19 +85,19 @@ export const login = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (!user) {
-        return res.status(404).send("User not found");
+        return res.status(404).json("User not found");
       }
 
       bcrypt.compare(password, user.password, (err, result) => {
         if (err) {
           console.error(err);
-          return res.status(500).send("An error occurred while logging in");
+          return res.status(500).json("An error occurred while logging in");
         }
 
         if (result) {
-          res.status(200).send("Logging you in");
+          res.status(200).json(user);
         } else {
-          res.status(401).send("Invalid password");
+          res.status(401).json("Invalid password");
         }
       });
     })
@@ -134,7 +134,7 @@ export const deleteUser = (req, res, next) => {
       if (!deletedUser) {
         return res.status(404).send("User not found");
       }
-      res.status(200).json("Account successfully deleted");
+      res.status(200).json({ message: "Account successfully deleted" });
     })
     .catch((error) => {
       console.error(error);
