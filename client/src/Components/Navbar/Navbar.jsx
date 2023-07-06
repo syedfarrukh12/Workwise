@@ -8,6 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import AddIcon from '@mui/icons-material/Add';
 
 function Navbar({ setIsLoggedIn }) {
   const navigate = useNavigate();
@@ -57,6 +58,11 @@ function Navbar({ setIsLoggedIn }) {
           <div className="flex flex-row space-x-4 items-center">
             <NavLink to="/" className="cursor-pointer">
               Home
+            </NavLink>
+
+            <NavLink to='create-ticket' className="cursor-pointer py-2 px-4 bg-white/50 rounded-full">
+              <AddIcon style={{width: '20px', height: '20px', marginTop: '-3px'}}/>
+              <span className="hidden md:inline">Create Ticket</span>
             </NavLink>
             {/* <NavLink to="/projects" className="cursor-pointer">
               Projects

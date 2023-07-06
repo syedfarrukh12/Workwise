@@ -141,3 +141,13 @@ export const deleteUser = (req, res, next) => {
       res.status(500).send("An error occurred while updating the user");
     });
 };
+
+export const inviteUser = async (req, res, next) => {
+  const email = req.body;
+  const user = await User.findOne(email)
+  if (user){
+    res.json(true)
+  }else{
+    res.json(false)
+  }
+};

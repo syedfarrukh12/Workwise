@@ -1,25 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const projectSlice = createSlice({
-  name: "project",
+  name: "projects",
   initialState: {
-    value: {
-      name: "",
-      description: "",
-      startDate: "",
-      endDate: "",
-      users: "",
-      createdBy: "",
-      createdAt: "",
-    },
+    projects: [],
+    selectedProject: {}
   },
   reducers: {
-    addProject: (state, action) => {
-      state.value = action.payload;
+    addProjects: (state, action) => {
+      state.projects.push(action.payload);
     },
+    setSelectedProject: (state, action) => {
+      state.selectedProject = action.payload;
+    }
   },
 });
 
-export const { addProject } = projectSlice.actions;
+export const { addProjects, setSelectedProject } = projectSlice.actions;
 
 export default projectSlice.reducer;

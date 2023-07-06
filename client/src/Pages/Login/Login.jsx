@@ -3,8 +3,11 @@ import { Alert, Button, Snackbar, TextField } from "@mui/material";
 import axios from "axios";
 import { API_URL } from "../../Components/Common/apiConfig.js";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/user.js";
 
 const Login = ({ setIsLoggedIn }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState({
@@ -35,13 +38,14 @@ const Login = ({ setIsLoggedIn }) => {
           setIsLoggedIn(true);
           navigate("/");
           localStorage.setItem("apiKey", "true");
-          console.log(response.data);
+          const {name, email, username, role, _id} = response.data
+          dispatch(login({name, email, username, role, id: _id}))
         }
       })
       .catch((error) => {
-        console.error("Error here",error);
-        setOpen(true)
-        setSnackbarContent({type: 'error', content: error.response.data})
+        console.error(error);
+        setOpen(true);
+        setSnackbarContent({ type: "error", content: error.response.data });
       });
   };
 
