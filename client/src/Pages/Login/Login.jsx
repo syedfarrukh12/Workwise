@@ -37,7 +37,7 @@ const Login = ({ setIsLoggedIn }) => {
         if (response.status === 200) {
           setIsLoggedIn(true);
           navigate("/");
-          localStorage.setItem("apiKey", "true");
+          localStorage.setItem("apiKey", response.data._id);
           const {name, email, username, role, _id} = response.data
           dispatch(login({name, email, username, role, id: _id}))
         }

@@ -8,7 +8,6 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import AddIcon from '@mui/icons-material/Add';
 
 function Navbar({ setIsLoggedIn }) {
   const navigate = useNavigate();
@@ -41,15 +40,16 @@ function Navbar({ setIsLoggedIn }) {
 
   return (
     <>
-      <div>
-        <div
-          className="flex items-center align-middle justify-between flex-row px-5 py-2 shadow-lg z-50"
-          style={{ backgroundColor: "rgba(1,1,1,0.3)" }}
-        >
+      <div
+        className={`fixed top-0 w-full z-50 text-sm ${
+          currentTheme === "dark" ? " bg-[#182536]" : "bg-[#a5b9c9]"
+        }`}
+      >
+        <div className="flex items-center align-middle justify-between flex-row px-5 py-2 shadow-lg z-50">
           <NavLink
             to="/"
             className={`text-xl cursor-pointer ${
-              currentTheme === "dark" ? "text-sky-400" : "text-sky-900"
+              currentTheme === "dark" ? "text-[#DDE6ED]" : "text-[#27374D]"
             }`}
           >
             <code>Workwise</code>
@@ -58,11 +58,6 @@ function Navbar({ setIsLoggedIn }) {
           <div className="flex flex-row space-x-4 items-center">
             <NavLink to="/" className="cursor-pointer">
               Home
-            </NavLink>
-
-            <NavLink to='create-ticket' className="cursor-pointer py-2 px-4 bg-white/50 rounded-full">
-              <AddIcon style={{width: '20px', height: '20px', marginTop: '-3px'}}/>
-              <span className="hidden md:inline">Create Ticket</span>
             </NavLink>
             {/* <NavLink to="/projects" className="cursor-pointer">
               Projects

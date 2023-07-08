@@ -5,6 +5,8 @@ import { Suspense, useContext, useState } from "react";
 import Navbar from "./Components/Navbar/Navbar.jsx";
 import AppRoutes from "./utils/AppRoutes";
 import { LinearProgress } from "@mui/material";
+import Sidebar from "./Components/Sidebar/Sidebar";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 function App() {
   const { theme } = useContext(ThemeContext);
@@ -12,21 +14,40 @@ function App() {
     !!localStorage.getItem("apiKey")
   );
 
+  const muiTheme = createTheme({
+    palette: {
+      mode: theme === "dark" ? "dark" : "light",
+    },
+  });
+
   return (
-    <div
-      style={{
-        backgroundColor: theme === "dark" ? "#333" : "#fff",
-        color: theme === "dark" ? "#fff" : "#333",
-        height: "100vh",
-      }}
-    >
-      <Router>
-        {isLoggedIn && <Navbar setIsLoggedIn={setIsLoggedIn} />}
-        <Suspense fallback={<LinearProgress />}>
-          <AppRoutes setIsLoggedIn={setIsLoggedIn} />
-        </Suspense>
-      </Router>
-    </div>
+    <ThemeProvider theme={muiTheme}>
+      <div
+        style={{
+          backgroundColor: theme === "dark" ? "#27374D" : "#DDE6ED",
+          color: theme === "dark" ? "#DDE6ED" : "#27374D",
+          height: "100vh",
+        }}
+      >
+        <Router>
+          {isLoggedIn && (
+            <>
+              <Navbar setIsLoggedIn={setIsLoggedIn} />
+              <Sidebar />
+            </>
+          )}
+          <div
+            className={`${
+              isLoggedIn ? "mt-14 lg:ml-[13.5rem]" : "mt-0"
+            } text-sm`}
+          >
+            <Suspense fallback={<LinearProgress />}>
+              <AppRoutes setIsLoggedIn={setIsLoggedIn} />
+            </Suspense>
+          </div>
+        </Router>
+      </div>
+    </ThemeProvider>
   );
 }
 

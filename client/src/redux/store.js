@@ -7,7 +7,7 @@ import projectsReducer from "./project.js";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["user"],
+  whitelist: ["user", "projects"],
 };
 
 const rootReducer = combineReducers({
