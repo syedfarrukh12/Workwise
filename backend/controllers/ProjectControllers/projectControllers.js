@@ -20,7 +20,7 @@ export const getProject = async (req, res, next) => {
   const id = req.params.id;
   const userId = req.params.userId;
 
-  Project.find({_id: id, createdBy: userId})
+  Project.findOne({_id: id, createdBy: userId})
     .then((project) => {
       if (!project) {
         res.status(404).json("Project not found");

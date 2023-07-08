@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Components/Common/apiConfig";
@@ -15,8 +15,9 @@ const Dashboard = () => {
     (state) => state.projects.showCreateProject
   );
   const selectedProject = useSelector(
-    (state) => state.projects.selectedProject
+    (state) => state.projects.selectedProject._id
   );
+  const [project, setProject] = useState({});
 
   useEffect(() => {
     if (!localStorage.getItem("apiKey")) {
@@ -33,6 +34,18 @@ const Dashboard = () => {
     //eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/projects/${selectedProject}/${user.id}`)
+      .then((response) => {
+        setProject(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    //eslint-disable-next-line
+  }, [selectedProject]);
+
   return (
     <div>
       {showCreateModal && (
@@ -42,11 +55,11 @@ const Dashboard = () => {
       )}
 
       <div className="p-5 space-y-5">
-        {selectedProject && (
+        {project && (
           <>
             <div className="">
-              {selectedProject.name} <br />
-              {selectedProject.description}
+              {project.name} <br />
+              {project.description}
             </div>
             <hr />
             <div className="">

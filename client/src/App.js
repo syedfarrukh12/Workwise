@@ -38,7 +38,7 @@ function App() {
           )}
           <div
             className={`${
-              isLoggedIn ? "mt-14 lg:ml-[13.5rem]" : "mt-0"
+              isLoggedIn ? "mt-14 lg:ml-[15%]" : "mt-0"
             } text-sm`}
           >
             <Suspense fallback={<LinearProgress />}>

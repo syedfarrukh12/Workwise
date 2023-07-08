@@ -38,11 +38,11 @@ function CreateProject() {
 
   return (
     <>
-      <div className="flex  items-center h-screen w-screen bg-gray-500/50 fixed z-10 p-2">
+      <div className="flex justify-center lg:justify-start items-center h-screen w-screen bg-gray-500/50 fixed z-10 p-2">
         <div
           className={`${
             theme === "dark" ? "bg-[#27374D]" : "bg-white"
-          } md:rounded-2xl lg:w-[40%] w-full lg:ml-80 mt-[-60px] shadow-2xl`}
+          } md:rounded-2xl lg:w-[40%] md:w-[70%] w-full lg:ml-80 mt-[-60px] shadow-2xl`}
         >
           <div className="flex justify-between p-5 border-b">
             <span>Create Project</span>

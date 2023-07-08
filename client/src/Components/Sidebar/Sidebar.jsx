@@ -47,23 +47,23 @@ function Sidebar() {
         onClick={() => {
           dispatch(setShowCreateProject(true))
         }}
-        className={`cursor-pointer py-2 px-4 justify-center flex space-x-3 rounded-full ${
+        className={`cursor-pointer py-2 px-4 justify-center flex items-center space-x-1 rounded-full ${
           theme === "dark"
             ? "bg-white/10 hover:bg-white/20 :"
             : "bg-black/10 hover:bg-black/20"
         }`}
       >
-        <AddIcon style={{ width: "20px", height: "20px", marginTop: "-3px" }} />
+        <AddIcon style={{ width: "15px", height: "15px" }} />
         <span className="hidden md:inline">Create Project</span>
       </button>
       <button
-        className={`cursor-pointer py-2 px-4 justify-center flex space-x-3 rounded-full ${
+        className={`cursor-pointer py-2 px-4 justify-center items-center flex space-x-2 rounded-full ${
           theme === "dark"
             ? "bg-white/10 hover:bg-white/20 :"
             : "bg-black/10 hover:bg-black/20"
         }`}
       >
-        <AssignmentIcon style={{ width: "20px", height: "20px", marginTop: "-3px" }} />
+        <AssignmentIcon style={{ width: "15px", height: "15px" }} />
         <span className="hidden md:inline">Add Ticket</span>
       </button>
     </div>
