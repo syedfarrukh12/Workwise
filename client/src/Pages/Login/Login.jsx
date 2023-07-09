@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Button, Snackbar, TextField } from "@mui/material";
+import { Alert, Snackbar, TextField } from "@mui/material";
 import axios from "axios";
 import { API_URL } from "../../Components/Common/apiConfig.js";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/user.js";
 
 const Login = ({ setIsLoggedIn }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = localStorage.getItem("theme");
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState({
     email: "",
@@ -34,14 +38,15 @@ const Login = ({ setIsLoggedIn }) => {
         if (response.status === 200) {
           setIsLoggedIn(true);
           navigate("/");
-          localStorage.setItem("apiKey", "true");
-          console.log(response.data);
+          localStorage.setItem("apiKey", response.data._id);
+          const { name, email, username, role, _id } = response.data;
+          dispatch(login({ name, email, username, role, id: _id }));
         }
       })
       .catch((error) => {
-        console.error("Error here",error);
-        setOpen(true)
-        setSnackbarContent({type: 'error', content: error.response.data})
+        console.error(error);
+        setOpen(true);
+        setSnackbarContent({ type: "error", content: error.response.data });
       });
   };
 
@@ -104,13 +109,22 @@ const Login = ({ setIsLoggedIn }) => {
                 }));
               }}
             />
-            <Button variant="contained" onClick={handleLogin}>
+            <button
+              className={`rounded-full p-2 ${
+                theme === "dark"
+                  ? "bg-[#DDE6ED] text-[#27374D] hover:bg-[#a9b3bb]"
+                  : "bg-[#27374D] text-[#DDE6ED] hover:bg-[#43556f]"
+              }`}
+              onClick={handleLogin}
+            >
               Login
-            </Button>
+            </button>
             <div>
               or{" "}
               <Link
-                className="text-blue-500 underline hover:text-blue-800"
+                className={`underline ${
+                  theme === "dark" ? " text-[#DDE6ED] hover:text-[#a9b3bb]" : " text-[#27374D] hover:text-[#16253c]"
+                }`}
                 to="/signup"
               >
                 Sign up

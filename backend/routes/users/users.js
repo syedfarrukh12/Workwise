@@ -5,7 +5,8 @@ import {
   createUser,
   login,
   updateUser,
-  deleteUser
+  deleteUser,
+  inviteUser
 } from "../../controllers/UserControllers/userController.js";
 const router = Router();
 
@@ -15,5 +16,6 @@ router.post("/signup", createUser);
 router.post("/login", login);
 router.put("/user", updateUser);
 router.delete("/user/:id", deleteUser);
+router.post("/invite", inviteUser);
 
 export default router;

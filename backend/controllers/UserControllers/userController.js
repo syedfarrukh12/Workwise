@@ -141,3 +141,15 @@ export const deleteUser = (req, res, next) => {
       res.status(500).send("An error occurred while updating the user");
     });
 };
+
+export const inviteUser = async (req, res, next) => {
+  const email = req.body.email;
+  if (email) {
+    const user = await User.findOne({email: email});
+    if (user) {
+      res.json("User already present on Workwise");
+    } else {
+      res.json(`Invitation sent to ${email}`);
+    }
+  }
+};

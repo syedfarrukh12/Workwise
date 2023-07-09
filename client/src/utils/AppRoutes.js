@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 
-const Dashboard = React.lazy(() => import("../Components/Dashboard/Dashboard.jsx"));
+const Dashboard = React.lazy(() => import("../Pages/Dashboard/Dashboard.jsx"));
 const Login = React.lazy(() => import("../Pages/Login/Login.jsx"));
 const Signup = React.lazy(() => import("../Pages/signup/Signup.jsx"));
 

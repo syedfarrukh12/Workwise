@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Button, Snackbar, TextField } from "@mui/material";
+import { Alert, Snackbar, TextField } from "@mui/material";
 import axios from "axios";
 import { API_URL } from "../../Components/Common/apiConfig.js";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import { isValidEmail } from "../../Components/utils.js";
 
 const Signup = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
+  const theme = localStorage.getItem('theme')
   const [confirmPassword, setConfirmPassword] = useState("");
   const [open, setOpen] = useState(false);
   const [snackbarContent, setSnackbarContent] = useState({
@@ -154,7 +155,7 @@ const Signup = ({ setIsLoggedIn }) => {
                     ...prevUser,
                     password: e.target.value,
                   }));
-                  setPasswordError('')
+                  setPasswordError("");
                 }}
                 helperText={passwordError}
               />
@@ -167,7 +168,7 @@ const Signup = ({ setIsLoggedIn }) => {
                 variant="outlined"
                 onChange={(e) => {
                   setConfirmPassword(e.target.value);
-                  setPasswordError('')
+                  setPasswordError("");
                 }}
               />
               <FormControl fullWidth>
@@ -193,13 +194,22 @@ const Signup = ({ setIsLoggedIn }) => {
                   <MenuItem value={"qa"}>QA</MenuItem>
                 </Select>
               </FormControl>
-              <Button variant="contained" onClick={handleSignup}>
+              <button
+                className={`rounded-full p-2 ${
+                  theme === "dark"
+                    ? "bg-[#DDE6ED] text-[#27374D] hover:bg-[#a9b3bb]"
+                    : "bg-[#27374D] text-[#DDE6ED] hover:bg-[#43556f]"
+                }`}
+                onClick={handleSignup}
+              >
                 Create Account
-              </Button>
+              </button>
               <div>
                 Already have account?{" "}
                 <Link
-                  className="text-blue-500 underline hover:text-blue-800"
+                  className={`underline ${
+                    theme === "dark" ? " text-[#DDE6ED] hover:text-[#a9b3bb]" : " text-[#27374D] hover:text-[#16253c]"
+                  }`}
                   to="/login"
                 >
                   Log in
