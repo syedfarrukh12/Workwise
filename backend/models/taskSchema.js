@@ -5,12 +5,12 @@ const taskSchema = new Schema({
   description: { type: String },
   status: {
     type: String,
-    enum: ["new", "inProgress", "completed"],
+    enum: ["hold", "new", "inDevelopment", "readyForDevelopment", "readyForTesting", "inQATesting", "finalReview", "completed"],
     default: "new",
   },
   priority: { 
     type: String,
-    enum: ["high", "medium", "low"],
+    enum: ["high", "medium", "low", "critical"],
     default: "low",
   },
   project: {
@@ -33,6 +33,10 @@ const taskSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  visible: {
+    type: Boolean,
+    default: true,
+  }
 });
 
 export default model("Task", taskSchema);

@@ -78,7 +78,8 @@ export const updateTask = async (req, res, next) => {
   const task_id = req.params.task_id;
 
   try {
-    const { name, description, status, priority, dueDate, assignee } = req.body;
+    const { name, description, status, priority, dueDate, assignee, visible } =
+      req.body;
     const task = await Task.findOne({
       _id: task_id,
       project: project_id,
@@ -88,12 +89,34 @@ export const updateTask = async (req, res, next) => {
       return res.status(404).send("Task not found");
     }
 
-    task.name = name;
-    task.description = description;
-    task.status = status;
-    task.priority = priority;
-    task.dueDate = dueDate;
-    task.assignee = assignee;
+    if (visible !== undefined) {
+      task.visible = visible;
+    }
+
+    if (name) {
+      task.name = name;
+    }
+
+    if (description) {
+      task.description = description;
+    }
+
+    if (status) {
+      task.status = status;
+    }
+
+    if (priority) {
+      task.priority = priority;
+    }
+
+    if (dueDate) {
+      task.dueDate = dueDate;
+    }
+
+    if (assignee) {
+      task.assignee = assignee;
+    }
+
     const updatedTask = await task.save();
 
     res.status(200).json(updatedTask);
@@ -118,7 +141,7 @@ export const deleteTask = async (req, res, next) => {
     }
 
     task.deleteOne().then(() => {
-      res.status(200).json({ messgae: "Task deleted successfully" });
+      res.status(200).json("Task deleted successfully");
     });
   } catch (error) {
     console.error(error);
