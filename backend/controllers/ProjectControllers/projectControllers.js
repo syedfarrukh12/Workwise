@@ -35,13 +35,14 @@ export const getProject = async (req, res, next) => {
 };
 
 export const createProject = async (req, res, next) => {
-  const { name, description, createdBy } = req.body;
+  const { name, description, createdBy, users } = req.body;
   console.log(name, description, createdBy)
   try{
     const project = new Project({
       name,
       description,
       createdBy,
+      users
     });
   
     project

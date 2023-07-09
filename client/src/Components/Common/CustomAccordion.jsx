@@ -7,6 +7,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TicketCard from "../TicketCard/TicketCard";
 import { TaskStatus, camelCaseToSentenceCase } from "../utils";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 function CustomAccordion({ tasks }) {
   const groupedTasks = {};
@@ -20,6 +21,7 @@ function CustomAccordion({ tasks }) {
     groupedTasks[status].push(task);
   });
 
+  if (tasks.length > 0)
   return (
     <div>
       {Object.values(TaskStatus).map((status) => (
@@ -54,6 +56,14 @@ function CustomAccordion({ tasks }) {
       ))}
     </div>
   );
+  else
+    return(
+      <div className="flex items-center h-screen justify-center text-lg flex-col">
+        <ErrorOutlineIcon className={`!w-52 !h-52`}/>
+        No tasks found on this project
+      </div>
+    )
+  
 }
 
 export default CustomAccordion;

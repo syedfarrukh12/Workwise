@@ -17,6 +17,7 @@ function CreateProject() {
     endDate: "",
     createdAt: Date.now(),
     createdBy: user?.id,
+    users: [user?.id]
   });
 
   const handleChange = (e) => {
@@ -28,6 +29,7 @@ function CreateProject() {
   };
 
   const handleSubmit = () => {
+    console.log(project)
     axios
       .post(`${API_URL}/project`, project)
       .then(() => {
