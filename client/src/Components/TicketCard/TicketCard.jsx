@@ -10,7 +10,7 @@ import { TaskPriority } from "../utils";
 import axios from "axios";
 import { API_URL } from "../Common/apiConfig";
 import { useDispatch, useSelector } from "react-redux";
-import { setOpenAlert, setShowTicket } from "../../redux/nonPersistant";
+import { setOpenAlert, setShowTicket, setSelectedTask } from "../../redux/nonPersistant";
 
 function TicketCard({ task }) {
   const dispatch = useDispatch();
@@ -43,7 +43,8 @@ function TicketCard({ task }) {
 
   const handleUpdateTicket = () => {
     setAnchorEl(null);
-    dispatch(setShowTicket(true));
+    dispatch(setSelectedTask(task));
+    dispatch(setShowTicket({value:true, type: 'edit'}));
   };
 
   const handleUpdateVisibility = () => {

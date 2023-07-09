@@ -5,8 +5,9 @@ export const nonPersistantSlice = createSlice({
   initialState: {
     openAlert: { value: false, message: "", type: "" },
     showInvite: false,
-    showTicket: false,
-    tasks: []
+    showTicket: {value:false, type: ''},
+    tasks: [],
+    selectedTask: {},
   },
   reducers: {
     setOpenAlert: (state, action) => {
@@ -21,10 +22,18 @@ export const nonPersistantSlice = createSlice({
     addTask: (state, action) => {
       state.tasks.push(action.payload);
     },
+    setSelectedTask: (state, action) => {
+      state.selectedTask = action.payload;
+    },
   },
 });
 
-export const { setOpenAlert, setShowInvite, setShowTicket, addTask } =
-  nonPersistantSlice.actions;
+export const {
+  setOpenAlert,
+  setShowInvite,
+  setShowTicket,
+  addTask,
+  setSelectedTask,
+} = nonPersistantSlice.actions;
 
 export default nonPersistantSlice.reducer;

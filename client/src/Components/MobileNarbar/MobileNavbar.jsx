@@ -52,7 +52,7 @@ function MobileNavbar() {
           <button
             onClick={() => {
               dispatch(setShowInvite(false));
-              dispatch(setShowTicket(false));
+              dispatch(setShowTicket({value:false, type: ''}));
               dispatch(setShowCreateProject(true));
             }}
             className={`cursor-pointer py-2 px-4 justify-center flex items-center space-x-1 rounded-full ${
@@ -69,7 +69,7 @@ function MobileNavbar() {
         <button
           onClick={() => {
             dispatch(setShowInvite(false));
-            dispatch(setShowTicket(true));
+            dispatch(setShowTicket({value:true, type: ''}));
             dispatch(setShowCreateProject(false));
           }}
           className={`cursor-pointer py-2 px-4 justify-center items-center flex space-x-2 rounded-full ${
@@ -98,7 +98,7 @@ function MobileNavbar() {
           onClick={() => {
             dispatch(setShowCreateProject(false));
             dispatch(setShowInvite(true));
-            dispatch(setShowTicket(false));
+            dispatch(setShowTicket({value:true, type: ''}));
           }}
           className={`cursor-pointer py-2 px-4 justify-center items-center flex space-x-2 rounded-full ${
             theme === "dark"

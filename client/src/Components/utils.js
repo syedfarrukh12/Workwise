@@ -13,8 +13,8 @@ export const TaskPriority = {
 export const TaskStatus = {
   Hold: "hold",
   New: "new",
-  InDevelopment: "inDevelopment",
   ReadyForDevelopment: "readyForDevelopment",
+  InDevelopment: "inDevelopment",
   ReadyForTesting: "readyForTesting",
   InQATesting: "inQATesting",
   FinalReview: "finalReview",
@@ -34,5 +34,3 @@ export function camelCaseToSentenceCase(camelCaseString) {
   });
   return sentenceCaseWords.join(" ");
 }
-
-

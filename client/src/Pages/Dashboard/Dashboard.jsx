@@ -77,10 +77,10 @@ const Dashboard = () => {
         )}
         <div className="-mt-16 lg:mt-0">
           {showInviteModal && <InviteModal />}
-          {showTicketModal && <TicketModal />}
+          {showTicketModal.value && <TicketModal />}
         </div>
 
-        <div className="p-3">
+        <div className="p-3 mt-14 lg:mt-0">
           <CustomAccordion tasks={tasks} />
         </div>
       </div>
