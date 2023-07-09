@@ -16,6 +16,6 @@ router.post("/signup", createUser);
 router.post("/login", login);
 router.put("/user", updateUser);
 router.delete("/user/:id", deleteUser);
-router.get("/invite", inviteUser);
+router.post("/invite", inviteUser);
 
 export default router;

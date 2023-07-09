@@ -35,7 +35,7 @@ const taskSchema = new Schema({
   },
   visible: {
     type: Boolean,
-    default: false,
+    default: true,
   }
 });
 

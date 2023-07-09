@@ -143,11 +143,13 @@ export const deleteUser = (req, res, next) => {
 };
 
 export const inviteUser = async (req, res, next) => {
-  const email = req.body;
-  const user = await User.findOne(email)
-  if (user){
-    res.json(true)
-  }else{
-    res.json(false)
+  const email = req.body.email;
+  if (email) {
+    const user = await User.findOne({email: email});
+    if (user) {
+      res.json("User already present on Workwise");
+    } else {
+      res.json(`Invitation sent to ${email}`);
+    }
   }
 };

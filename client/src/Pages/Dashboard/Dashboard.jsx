@@ -6,6 +6,10 @@ import { API_URL } from "../../Components/Common/apiConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { addProjects } from "../../redux/project";
 import CreateProject from "../../Components/CreateProject/CreateProject";
+import InviteModal from "../../Components/InviteModal/InviteModal";
+import CustomSnackbar from "../../Components/Common/CustomSnackbar";
+import TicketModal from "../../Components/TicketModal/TicketModal";
+import TicketCard from "../../Components/TicketCard/TicketCard";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -17,7 +21,14 @@ const Dashboard = () => {
   const selectedProject = useSelector(
     (state) => state.projects.selectedProject._id
   );
-  const [project, setProject] = useState({});
+  const showInviteModal = useSelector(
+    (state) => state.nonPersistant.showInvite
+  );
+  const showTicketModal = useSelector(
+    (state) => state.nonPersistant.showTicket
+  );
+  const snackbar = useSelector((state) => state.nonPersistant.openAlert);
+  const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
     if (!localStorage.getItem("apiKey")) {
@@ -36,42 +47,36 @@ const Dashboard = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/projects/${selectedProject}/${user.id}`)
+      .get(`${API_URL}/tasks/${selectedProject}`)
       .then((response) => {
-        setProject(response.data);
+        setTasks(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
     //eslint-disable-next-line
-  }, [selectedProject]);
+  }, [selectedProject, tasks]);
 
   return (
-    <div>
+    <div className="p-5">
+      <CustomSnackbar
+        value={snackbar.value}
+        type={snackbar.type}
+        message={snackbar.message}
+      />
       {showCreateModal && (
         <div>
           <CreateProject />
         </div>
       )}
+      {showInviteModal && <InviteModal />}
+      {showTicketModal && <TicketModal />}
 
-      <div className="p-5 space-y-5">
-        {project && (
-          <>
-            <div className="">
-              {project.name} <br />
-              {project.description}
-            </div>
-            <hr />
-            <div className="">
-              <h2>{user?.email}</h2>
-              <h2>{user?.name}</h2>
-              <h2>{user?.username}</h2>
-              <h2>{user?.role}</h2>
-              <h2>{user?.id}</h2>
-            </div>
-          </>
-        )}
-      </div>
+      {tasks.map((task) => (
+        <div key={task._id}>
+          <TicketCard task={task} />
+        </div>
+      ))}
     </div>
   );
 };

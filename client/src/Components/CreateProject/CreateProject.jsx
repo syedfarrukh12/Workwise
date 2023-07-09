@@ -30,7 +30,9 @@ function CreateProject() {
   const handleSubmit = () => {
     axios
       .post(`${API_URL}/project`, project)
-      .then(() => {})
+      .then(() => {
+        dispatch(setShowCreateProject(false));
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -44,11 +46,11 @@ function CreateProject() {
             theme === "dark" ? "bg-[#27374D]" : "bg-white"
           } md:rounded-2xl lg:w-[40%] md:w-[70%] w-full lg:ml-80 mt-[-60px] shadow-2xl`}
         >
-          <div className="flex justify-between p-5 border-b">
+          <div className="flex justify-between p-3 border-b">
             <span>Create Project</span>
             <button
               onClick={() => {
-                dispatch(setShowCreateProject(false))
+                dispatch(setShowCreateProject(false));
               }}
               className="bg-none"
             >
@@ -105,10 +107,10 @@ function CreateProject() {
               onChange={handleChange}
             />
           </div>
-          <div className="p-5 space-x-3 justify-end flex">
+          <div className="p-3 space-x-3 justify-end flex">
             <button
               onClick={() => {
-                dispatch(setShowCreateProject(false))
+                dispatch(setShowCreateProject(false));
               }}
               className="bg-red-500 hover:bg-red-700 p-2 rounded-lg text-white"
             >
