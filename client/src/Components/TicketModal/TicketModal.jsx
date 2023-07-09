@@ -2,7 +2,7 @@ import { FormControl, MenuItem, Select, TextField } from "@mui/material";
 import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "react-redux";
-import { setOpenAlert, setShowTicket } from "../../redux/nonPersistant";
+import { addTask, setOpenAlert, setShowTicket } from "../../redux/nonPersistant";
 import axios from "axios";
 import { API_URL } from "../Common/apiConfig";
 
@@ -37,6 +37,7 @@ function TicketModal() {
     axios.post(`${API_URL}/task`, ticket).then((response)=>{
       dispatch(setOpenAlert({value: true, message: 'Ticket Created Successfully', type: 'success'}));
       dispatch(setShowTicket(false));
+      dispatch(addTask(response.data));
     }).catch((error)=>{
       dispatch(setOpenAlert({value: true, message: error, type: 'error'}));
     })
@@ -141,7 +142,7 @@ function TicketModal() {
               onClick={handleSubmit}
               className="bg-sky-600 hover:bg-sky-800 p-2 rounded-lg text-white"
             >
-              Create Project
+              Create Ticket
             </button>
           </div>
         </div>

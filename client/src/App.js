@@ -18,6 +18,9 @@ function App() {
     palette: {
       mode: theme === "dark" ? "dark" : "light",
     },
+    typography: {
+      fontSize: 14,
+    },
   });
 
   return (
@@ -39,7 +42,7 @@ function App() {
           <div
             className={`${
               isLoggedIn ? "mt-14 lg:ml-[15%]" : "mt-0"
-            } text-sm`}
+            } text-sm ${theme === "dark" ? "bg-[#27374D]" : "bg-[#DDE6ED]"}`}
           >
             <Suspense fallback={<LinearProgress />}>
               <AppRoutes setIsLoggedIn={setIsLoggedIn} />

@@ -8,6 +8,8 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useDispatch } from "react-redux";
+import { resetStore } from "../../redux/store";
 
 function Navbar({ setIsLoggedIn }) {
   const navigate = useNavigate();
@@ -29,11 +31,13 @@ function Navbar({ setIsLoggedIn }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
     const theme = localStorage.getItem("theme");
     setIsLoggedIn(false);
     navigate("/login");
+    dispatch(resetStore());
     localStorage.clear();
     localStorage.setItem("theme", theme);
   };

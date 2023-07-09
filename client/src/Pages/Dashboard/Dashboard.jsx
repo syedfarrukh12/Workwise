@@ -9,7 +9,7 @@ import CreateProject from "../../Components/CreateProject/CreateProject";
 import InviteModal from "../../Components/InviteModal/InviteModal";
 import CustomSnackbar from "../../Components/Common/CustomSnackbar";
 import TicketModal from "../../Components/TicketModal/TicketModal";
-import TicketCard from "../../Components/TicketCard/TicketCard";
+import CustomAccordion from "../../Components/Common/CustomAccordion";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -28,6 +28,7 @@ const Dashboard = () => {
     (state) => state.nonPersistant.showTicket
   );
   const snackbar = useSelector((state) => state.nonPersistant.openAlert);
+  const allTasks = useSelector((state) => state.nonPersistant.tasks);
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
@@ -55,7 +56,7 @@ const Dashboard = () => {
         console.log(error);
       });
     //eslint-disable-next-line
-  }, [selectedProject, tasks]);
+  }, [selectedProject, allTasks]);
 
   return (
     <div className="p-5">
@@ -72,11 +73,7 @@ const Dashboard = () => {
       {showInviteModal && <InviteModal />}
       {showTicketModal && <TicketModal />}
 
-      {tasks.map((task) => (
-        <div key={task._id}>
-          <TicketCard task={task} />
-        </div>
-      ))}
+      <CustomAccordion tasks={tasks} />
     </div>
   );
 };
