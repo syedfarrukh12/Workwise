@@ -10,6 +10,7 @@ import InviteModal from "../../Components/InviteModal/InviteModal";
 import CustomSnackbar from "../../Components/Common/CustomSnackbar";
 import TicketModal from "../../Components/TicketModal/TicketModal";
 import CustomAccordion from "../../Components/Common/CustomAccordion";
+import MobileNavbar from "../../Components/MobileNarbar/MobileNavbar";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -59,22 +60,31 @@ const Dashboard = () => {
   }, [selectedProject, allTasks]);
 
   return (
-    <div className="p-5">
-      <CustomSnackbar
-        value={snackbar.value}
-        type={snackbar.type}
-        message={snackbar.message}
-      />
-      {showCreateModal && (
-        <div>
-          <CreateProject />
+    <>
+      <div className="w-full">
+        <MobileNavbar />
+      </div>
+      <div className="">
+        <CustomSnackbar
+          value={snackbar.value}
+          type={snackbar.type}
+          message={snackbar.message}
+        />
+        {showCreateModal && (
+          <div>
+            <CreateProject />
+          </div>
+        )}
+        <div className="-mt-16 lg:mt-0">
+          {showInviteModal && <InviteModal />}
+          {showTicketModal && <TicketModal />}
         </div>
-      )}
-      {showInviteModal && <InviteModal />}
-      {showTicketModal && <TicketModal />}
 
-      <CustomAccordion tasks={tasks} />
-    </div>
+        <div className="p-3">
+          <CustomAccordion tasks={tasks} />
+        </div>
+      </div>
+    </>
   );
 };
 

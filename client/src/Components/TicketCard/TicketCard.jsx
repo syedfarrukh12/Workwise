@@ -74,7 +74,7 @@ function TicketCard({ task }) {
       <div>
         <div
           className={`rounded-lg w-full h-14 p-3 flex items-center space-y-2 mt-2 shadow-md ${
-            theme === "dark" ? "bg-[#526D82]" : "bg-[#cfd8e0]"
+            theme === "dark" ? "bg-[#27374D]" : "bg-[#DDE6ED]"
           }`}
         >
           <div className="flex items-center w-full">
