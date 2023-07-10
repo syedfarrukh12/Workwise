@@ -5,7 +5,6 @@ import { Suspense, useContext, useState } from "react";
 import Navbar from "./Components/Navbar/Navbar.jsx";
 import AppRoutes from "./utils/AppRoutes";
 import { LinearProgress } from "@mui/material";
-import Sidebar from "./Components/Sidebar/Sidebar";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 function App() {
@@ -36,12 +35,11 @@ function App() {
           {isLoggedIn && (
             <>
               <Navbar setIsLoggedIn={setIsLoggedIn} />
-              <Sidebar />
             </>
           )}
           <div
             className={`${
-              isLoggedIn ? "mt-14 lg:ml-[15%]" : "mt-0"
+              isLoggedIn ? "mt-14" : "mt-0"
             } text-sm ${theme === "dark" ? "bg-[#27374D]" : "bg-[#DDE6ED]"}`}
           >
             <Suspense fallback={<LinearProgress />}>

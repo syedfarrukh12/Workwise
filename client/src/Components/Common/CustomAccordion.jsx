@@ -8,6 +8,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TicketCard from "../TicketCard/TicketCard";
 import { TaskStatus, camelCaseToSentenceCase } from "../utils";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import { animated, useSpring } from "@react-spring/web";
 
 function CustomAccordion({ tasks }) {
   const groupedTasks = {};
@@ -21,9 +22,24 @@ function CustomAccordion({ tasks }) {
     groupedTasks[status].push(task);
   });
 
+  const styles = useSpring({
+    from: {
+      opacity: 0,
+      transform: "translateY(-10px)",
+    },
+    to: {
+      opacity: 1,
+      transform: "translateY(0)",
+    },
+    config: {
+      duration: 500,
+      delay: 100,
+    },
+  });
+
   if (tasks.length > 0)
     return (
-      <div>
+      <animated.div style={styles}>
         {Object.values(TaskStatus).map((status) => (
           <Accordion
             style={{
@@ -52,12 +68,14 @@ function CustomAccordion({ tasks }) {
                   </div>
                 ))
               ) : (
-                <div className="text-sm text-center">No tasks in this section</div>
+                <div className="text-sm text-center">
+                  No tasks in this section
+                </div>
               )}
             </AccordionDetails>
           </Accordion>
         ))}
-      </div>
+      </animated.div>
     );
   else
     return (

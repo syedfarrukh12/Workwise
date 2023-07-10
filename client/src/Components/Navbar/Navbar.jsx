@@ -45,7 +45,7 @@ function Navbar({ setIsLoggedIn }) {
   return (
     <>
       <div
-        className={`fixed top-0 w-full z-50 text-sm ${
+        className={`fixed top-0 w-full z-20 text-sm ${
           currentTheme === "dark" ? " bg-[#182536]" : "bg-[#a5b9c9]"
         }`}
       >

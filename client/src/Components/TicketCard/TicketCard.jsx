@@ -10,7 +10,7 @@ import { TaskPriority } from "../utils";
 import axios from "axios";
 import { API_URL } from "../Common/apiConfig";
 import { useDispatch, useSelector } from "react-redux";
-import { setOpenAlert, setShowTicket, setSelectedTask } from "../../redux/nonPersistant";
+import { setOpenAlert, setShowTicket, setSelectedTask, deleteSelectedTask } from "../../redux/nonPersistant";
 
 function TicketCard({ task }) {
   const dispatch = useDispatch();
@@ -38,7 +38,9 @@ function TicketCard({ task }) {
             type: "success",
           })
         );
+        dispatch(deleteSelectedTask(task._id))
       });
+      
   };
 
   const handleUpdateTicket = () => {

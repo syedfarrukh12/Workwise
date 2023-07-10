@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { Backdrop, TextField } from "@mui/material";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
@@ -13,11 +13,13 @@ function InviteModal() {
 
   const handleSubmit = () => {
     axios
-      .post(`${API_URL}/invite`, {email: email})
+      .post(`${API_URL}/invite`, { email: email })
       .then((response) => {
         console.log(response.data);
-        dispatch(setOpenAlert({value: true, message: response.data, type: 'success'}))
-        dispatch(setShowInvite(false))
+        dispatch(
+          setOpenAlert({ value: true, message: response.data, type: "success" })
+        );
+        dispatch(setShowInvite(false));
       })
       .catch((error) => {
         console.log(error);
@@ -26,17 +28,26 @@ function InviteModal() {
 
   return (
     <>
-      <div className="flex justify-center lg:justify-start items-center h-screen w-screen bg-gray-500/50 fixed z-10 p-2">
+      <Backdrop
+        onClick={() => {
+          dispatch(setShowInvite(false));
+        }}
+        open={true}
+        style={{ zIndex: 30 }}
+      >
         <div
           className={`${
             theme === "dark" ? "bg-[#27374D]" : "bg-white"
-          } md:rounded-2xl lg:w-[30%] md:w-[50%]  w-full lg:ml-80 mt-[-60px] shadow-2xl`}
+          } md:rounded-2xl lg:w-[30%] md:w-[50%]  w-full shadow-2xl`}
         >
           <div className="flex justify-between p-3 border-b">
             <span>Invite People</span>
-            <button onClick={() => {
-              dispatch(setShowInvite(false))
-            }} className="bg-none">
+            <button
+              onClick={() => {
+                dispatch(setShowInvite(false));
+              }}
+              className="bg-none"
+            >
               <CloseIcon />
             </button>
           </div>
@@ -58,7 +69,7 @@ function InviteModal() {
           <div className="p-3 space-x-3 justify-end flex">
             <button
               onClick={() => {
-                dispatch(setShowInvite(false))
+                dispatch(setShowInvite(false));
               }}
               className="bg-red-500 hover:bg-red-700 p-2 rounded-lg text-white"
             >
@@ -72,7 +83,7 @@ function InviteModal() {
             </button>
           </div>
         </div>
-      </div>
+      </Backdrop>
     </>
   );
 }

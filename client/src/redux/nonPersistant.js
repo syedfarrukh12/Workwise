@@ -5,7 +5,7 @@ export const nonPersistantSlice = createSlice({
   initialState: {
     openAlert: { value: false, message: "", type: "" },
     showInvite: false,
-    showTicket: {value:false, type: ''},
+    showTicket: { value: false, type: "" },
     tasks: [],
     selectedTask: {},
   },
@@ -25,6 +25,15 @@ export const nonPersistantSlice = createSlice({
     setSelectedTask: (state, action) => {
       state.selectedTask = action.payload;
     },
+    deleteSelectedTask: (state, action) => {
+      const updatedTasks = state.tasks.filter(
+        (task) => task._id !== action.payload
+      );
+      return {
+        ...state,
+        tasks: updatedTasks,
+      };
+    },
   },
 });
 
@@ -34,6 +43,7 @@ export const {
   setShowTicket,
   addTask,
   setSelectedTask,
+  deleteSelectedTask,
 } = nonPersistantSlice.actions;
 
 export default nonPersistantSlice.reducer;

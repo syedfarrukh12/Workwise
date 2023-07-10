@@ -11,6 +11,9 @@ import CustomSnackbar from "../../Components/Common/CustomSnackbar";
 import TicketModal from "../../Components/TicketModal/TicketModal";
 import CustomAccordion from "../../Components/Common/CustomAccordion";
 import MobileNavbar from "../../Components/MobileNarbar/MobileNavbar";
+import Sidebar from "../../Components/Sidebar/Sidebar";
+import CustomDialog from "../../Components/Common/CustomDialog";
+import CustomNavigation from "../../Components/Common/CustomNavigation";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -20,7 +23,7 @@ const Dashboard = () => {
     (state) => state.projects.showCreateProject
   );
   const selectedProject = useSelector(
-    (state) => state.projects.selectedProject._id
+    (state) => state.projects.selectedProject?._id
   );
   const showInviteModal = useSelector(
     (state) => state.nonPersistant.showInvite
@@ -28,9 +31,11 @@ const Dashboard = () => {
   const showTicketModal = useSelector(
     (state) => state.nonPersistant.showTicket
   );
+  const projects = useSelector((state) => state.projects.projects);
   const snackbar = useSelector((state) => state.nonPersistant.openAlert);
   const allTasks = useSelector((state) => state.nonPersistant.tasks);
   const [tasks, setTasks] = useState([]);
+  const [showProjectDialog, setShowProjectDialog] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem("apiKey")) {
@@ -64,23 +69,39 @@ const Dashboard = () => {
       <div className="w-full">
         <MobileNavbar />
       </div>
-      <div className="">
-        <CustomSnackbar
-          value={snackbar.value}
-          type={snackbar.type}
-          message={snackbar.message}
+      <CustomSnackbar
+        value={snackbar.value}
+        type={snackbar.type}
+        message={snackbar.message}
+      />
+      <div>
+        <Sidebar
+          setShowProjectDialog={setShowProjectDialog}
+          showProjectDialog={showProjectDialog}
         />
+      </div>
+      <div className="lg:ml-[15%]">
+        <div className="sticky top-14 z-10">
+          <CustomNavigation />
+        </div>
         {showCreateModal && (
           <div>
             <CreateProject />
           </div>
         )}
-        <div className="-mt-16 lg:mt-0">
+        <div className="lg:mt-0">
           {showInviteModal && <InviteModal />}
           {showTicketModal.value && <TicketModal />}
         </div>
 
-        <div className="p-3 mt-14 lg:mt-0">
+        <div className="px-3 lg:mt-0">
+          <div>
+            <CustomDialog
+              open={showProjectDialog}
+              setOpen={setShowProjectDialog}
+              projects={projects}
+            />
+          </div>
           <CustomAccordion tasks={tasks} />
         </div>
       </div>
