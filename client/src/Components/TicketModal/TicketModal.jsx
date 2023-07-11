@@ -19,7 +19,6 @@ import {
   TaskPriority,
   TaskStatus,
   camelCaseToSentenceCase,
-  formatDate,
 } from "../utils";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -47,7 +46,7 @@ function TicketModal() {
           status: selectedTask.status,
           priority: selectedTask.priority,
           project: selectedTask.project,
-          dueDate: selectedTask.dueDate.toISOString,
+          dueDate: selectedTask.dueDate?.toISOString,
           assignee: selectedTask.assignee,
           createdAt: selectedTask.createdAt,
           createdBy: selectedTask.createdBy,

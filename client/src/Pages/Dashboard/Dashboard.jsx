@@ -14,6 +14,7 @@ import MobileNavbar from "../../Components/MobileNarbar/MobileNavbar";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import CustomDialog from "../../Components/Common/CustomDialog";
 import CustomNavigation from "../../Components/Common/CustomNavigation";
+import BoardView from "../../Components/BoardView/BoardView";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -34,8 +35,12 @@ const Dashboard = () => {
   const projects = useSelector((state) => state.projects.projects);
   const snackbar = useSelector((state) => state.nonPersistant.openAlert);
   const allTasks = useSelector((state) => state.nonPersistant.tasks);
+  const boardView = useSelector((state) => state.projects.showBoardView);
   const [tasks, setTasks] = useState([]);
   const [showProjectDialog, setShowProjectDialog] = useState(false);
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+  const showBoardView = boardView ?? false
 
   useEffect(() => {
     if (!localStorage.getItem("apiKey")) {
@@ -53,10 +58,12 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
+    setLoading(true)
     axios
       .get(`${API_URL}/tasks/${selectedProject}`)
       .then((response) => {
         setTasks(response.data);
+        setLoading(false)
       })
       .catch((error) => {
         console.log(error);
@@ -64,6 +71,9 @@ const Dashboard = () => {
     //eslint-disable-next-line
   }, [selectedProject, allTasks]);
 
+  const filteredTasks = tasks.filter((task) => {
+    return task.name.toLowerCase().includes(query.toLocaleLowerCase());
+  });
   return (
     <>
       <div className="w-full">
@@ -82,7 +92,7 @@ const Dashboard = () => {
       </div>
       <div className="lg:ml-[15%]">
         <div className="sticky top-14 z-10">
-          <CustomNavigation />
+          <CustomNavigation setQuery={setQuery} query={query} />
         </div>
         {showCreateModal && (
           <div>
@@ -94,7 +104,7 @@ const Dashboard = () => {
           {showTicketModal.value && <TicketModal />}
         </div>
 
-        <div className="px-3 lg:mt-0">
+        <div className="lg:mt-0">
           <div>
             <CustomDialog
               open={showProjectDialog}
@@ -102,7 +112,12 @@ const Dashboard = () => {
               projects={projects}
             />
           </div>
-          <CustomAccordion tasks={tasks} />
+
+          {showBoardView ? (
+            <BoardView tasks={filteredTasks} loading={loading} />
+          ) : (
+            <CustomAccordion tasks={filteredTasks} loading={loading} />
+          )}
         </div>
       </div>
     </>
