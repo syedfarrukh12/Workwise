@@ -12,8 +12,6 @@ function Sidebar({ setShowProjectDialog, showProjectDialog }) {
   const currentUser = useSelector((state) => state.user.value);
   const theme = localStorage.getItem("theme");
 
-  
-
   const selectedProject = useSelector(
     (state) => state.projects.selectedProject
   );
@@ -49,22 +47,23 @@ function Sidebar({ setShowProjectDialog, showProjectDialog }) {
           </button>
         )}
 
-        <button
-          onClick={() => {
-            dispatch(setShowInvite(false));
-            dispatch(setShowTicket({ value: true, type: "" }));
-            dispatch(setShowCreateProject(false));
-          }}
-          className={`cursor-pointer py-2 px-4 justify-center items-center flex space-x-2 rounded-full ${
-            theme === "dark"
-              ? "bg-white/10 hover:bg-white/20 :"
-              : "bg-black/10 hover:bg-black/20"
-          }`}
-        >
-          <AssignmentIcon style={{ width: "15px", height: "15px" }} />
-          <span className="hidden md:inline">Add Ticket</span>
-        </button>
-
+        {Object.keys(selectedProject).length !== 0 && (
+          <button
+            onClick={() => {
+              dispatch(setShowInvite(false));
+              dispatch(setShowTicket({ value: true, type: "" }));
+              dispatch(setShowCreateProject(false));
+            }}
+            className={`cursor-pointer py-2 px-4 justify-center items-center flex space-x-2 rounded-full ${
+              theme === "dark"
+                ? "bg-white/10 hover:bg-white/20"
+                : "bg-black/10 hover:bg-black/20"
+            }`}
+          >
+            <AssignmentIcon style={{ width: "15px", height: "15px" }} />
+            <span className="hidden md:inline">Add Ticket</span>
+          </button>
+        )}
       </div>
       <div className="flex-grow" />
       <div className="space-y-3 justify-end flex flex-col">

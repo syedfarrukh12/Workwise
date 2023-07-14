@@ -15,11 +15,7 @@ import {
 } from "../../redux/nonPersistant";
 import axios from "axios";
 import { API_URL } from "../Common/apiConfig";
-import {
-  TaskPriority,
-  TaskStatus,
-  camelCaseToSentenceCase,
-} from "../utils";
+import { TaskPriority, TaskStatus, camelCaseToSentenceCase } from "../utils";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -58,7 +54,7 @@ function TicketModal() {
           priority: "",
           project: currentProject._id,
           dueDate: "",
-          assignee: "",
+          assignee: currentUser.id,
           createdAt: Date.now(),
           createdBy: currentUser.id,
         }
@@ -74,6 +70,28 @@ function TicketModal() {
 
   const handleSubmit = () => {
     console.log(ticket);
+    console.log(selectedProject)
+    if (!ticket.project) {
+      return dispatch(
+        setOpenAlert({
+          value: true,
+          message: "Please Select a project before creating a new ticket",
+          type: "error",
+        })
+      );
+    }
+    if (
+      !ticket.name ||
+      !ticket.priority
+    ) {
+      return dispatch(
+        setOpenAlert({
+          value: true,
+          message: "Please Select all fields.",
+          type: "warning",
+        })
+      );
+    }
     if (editCondition)
       axios
         .put(
@@ -249,13 +267,13 @@ function TicketModal() {
               onClick={() => {
                 dispatch(setShowTicket({ value: false, type: "" }));
               }}
-              className="bg-red-500 hover:bg-red-700 p-2 rounded-lg text-white"
+              className="bg-red-500 hover:bg-red-700 py-2 px-3 rounded-full text-white"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
-              className="bg-sky-600 hover:bg-sky-800 p-2 rounded-lg text-white"
+              className="bg-sky-600 hover:bg-sky-800 py-2 px-3 rounded-full text-white"
             >
               {editCondition ? "Save" : "Create Ticket"}
             </button>

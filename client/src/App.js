@@ -28,7 +28,7 @@ function App() {
         style={{
           backgroundColor: theme === "dark" ? "#27374D" : "#DDE6ED",
           color: theme === "dark" ? "#DDE6ED" : "#27374D",
-          height: "100vh",
+          height: "93vh",
         }}
       >
         <Router>

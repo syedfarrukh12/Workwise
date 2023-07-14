@@ -46,6 +46,7 @@ const Dashboard = () => {
     if (!localStorage.getItem("apiKey")) {
       navigate("/login");
     }
+    if (!selectedProject) setShowProjectDialog(true)
     axios
       .get(`${API_URL}/projects/${user.id}`)
       .then((response) => {
@@ -114,7 +115,10 @@ const Dashboard = () => {
           </div>
 
           {showBoardView ? (
-            <BoardView tasks={filteredTasks} loading={loading} />
+            <div>
+              <BoardView tasks={filteredTasks} loading={loading} />
+            </div>
+            
           ) : (
             <CustomAccordion tasks={filteredTasks} loading={loading} />
           )}

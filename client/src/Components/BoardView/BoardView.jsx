@@ -5,7 +5,7 @@ import { TaskStatus } from "../utils";
 function BoardView({ tasks, loading }) {
   return (
     <>
-      <div className="flex overflow-x-auto">
+      <div className="flex overflow-x-auto overflow-y-hidden max-h-[84vh]">
         {Object.values(TaskStatus).map((status) => (
           <div key={status} className="ml-2">
             <BoardList status={status} tasks={tasks} loading={loading} />

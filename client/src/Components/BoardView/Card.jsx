@@ -106,13 +106,13 @@ function Card({ task }) {
         >
           <div
             onClick={handleDeleteTicket}
-            className="p-2 rounded-md hover:bg-[#a4b7c6] w-6 h-6 flex items-center justify-center cursor-pointer"
+            className="p-2 rounded-md hover:bg-[#a4b7c6] hover:text-[#000]  w-6 h-6 flex items-center justify-center cursor-pointer"
           >
             <DeleteIcon className="!h-5 !w-5" />
           </div>
           <div
             onClick={handleUpdateTicket}
-            className="p-2 rounded-md hover:bg-[#a4b7c6] w-6 h-6 flex items-center justify-center cursor-pointer"
+            className="p-2 rounded-md hover:bg-[#a4b7c6] hover:text-[#000]  w-6 h-6 flex items-center justify-center cursor-pointer"
           >
             <EditIcon className="!h-5 !w-5" />
           </div>
