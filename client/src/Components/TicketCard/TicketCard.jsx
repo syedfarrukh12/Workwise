@@ -10,7 +10,8 @@ import { TaskPriority } from "../utils";
 import axios from "axios";
 import { API_URL } from "../Common/apiConfig";
 import { useDispatch, useSelector } from "react-redux";
-import { setOpenAlert, setShowTicket, setSelectedTask } from "../../redux/nonPersistant";
+import { setOpenAlert, setShowTicket, setSelectedTask, deleteSelectedTask } from "../../redux/nonPersistant";
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 function TicketCard({ task }) {
   const dispatch = useDispatch();
@@ -38,7 +39,9 @@ function TicketCard({ task }) {
             type: "success",
           })
         );
+        dispatch(deleteSelectedTask(task._id))
       });
+      
   };
 
   const handleUpdateTicket = () => {
@@ -103,7 +106,7 @@ function TicketCard({ task }) {
             </div>
 
             <div className="ml-auto">
-              <div>
+              <div className="flex items-center">
                 <IconButton
                   aria-label="more"
                   id="long-button"
@@ -130,6 +133,9 @@ function TicketCard({ task }) {
                     <DeleteIcon className="!h-4 !w-4 mr-2" /> Delete
                   </MenuItem>
                 </Menu>
+                <div className="ml-2 cursor-grab">
+                  <DragIndicatorIcon />
+                </div>
               </div>
             </div>
           </div>

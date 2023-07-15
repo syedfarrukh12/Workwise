@@ -5,7 +5,8 @@ export const projectSlice = createSlice({
   initialState: {
     projects: [],
     selectedProject: {},
-    showCreateProject: false
+    showCreateProject: false,
+    showBoardView: false,
   },
   reducers: {
     addProjects: (state, action) => {
@@ -16,11 +17,18 @@ export const projectSlice = createSlice({
     },
     setShowCreateProject: (state, action) => {
       state.showCreateProject = action.payload;
-    }
+    },
+    setShowBoardView: (state, action) => {
+      state.showBoardView = action.payload;
+    },
   },
 });
 
-
-export const { addProjects, setSelectedProject, setShowCreateProject } = projectSlice.actions;
+export const {
+  addProjects,
+  setSelectedProject,
+  setShowCreateProject,
+  setShowBoardView,
+} = projectSlice.actions;
 
 export default projectSlice.reducer;

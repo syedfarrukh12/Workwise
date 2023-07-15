@@ -1,4 +1,10 @@
-import { FormControl, MenuItem, Select, TextField } from "@mui/material";
+import {
+  Backdrop,
+  FormControl,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +16,10 @@ import {
 import axios from "axios";
 import { API_URL } from "../Common/apiConfig";
 import { TaskPriority, TaskStatus, camelCaseToSentenceCase } from "../utils";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 function TicketModal() {
   const dispatch = useDispatch();
@@ -32,7 +42,7 @@ function TicketModal() {
           status: selectedTask.status,
           priority: selectedTask.priority,
           project: selectedTask.project,
-          dueDate: selectedTask.dueDate,
+          dueDate: selectedTask.dueDate?.toISOString,
           assignee: selectedTask.assignee,
           createdAt: selectedTask.createdAt,
           createdBy: selectedTask.createdBy,
@@ -44,7 +54,7 @@ function TicketModal() {
           priority: "",
           project: currentProject._id,
           dueDate: "",
-          assignee: "",
+          assignee: currentUser.id,
           createdAt: Date.now(),
           createdBy: currentUser.id,
         }
@@ -60,6 +70,28 @@ function TicketModal() {
 
   const handleSubmit = () => {
     console.log(ticket);
+    console.log(selectedProject)
+    if (!ticket.project) {
+      return dispatch(
+        setOpenAlert({
+          value: true,
+          message: "Please Select a project before creating a new ticket",
+          type: "error",
+        })
+      );
+    }
+    if (
+      !ticket.name ||
+      !ticket.priority
+    ) {
+      return dispatch(
+        setOpenAlert({
+          value: true,
+          message: "Please Select all fields.",
+          type: "warning",
+        })
+      );
+    }
     if (editCondition)
       axios
         .put(
@@ -104,11 +136,20 @@ function TicketModal() {
   };
   return (
     <>
-      <div className="flex justify-center lg:justify-start items-center h-screen w-screen bg-gray-500/50 fixed z-10 p-2">
+      <Backdrop
+        onClick={() => {
+          dispatch(setShowTicket({ value: false, type: "" }));
+        }}
+        open={true}
+        style={{ zIndex: 30 }}
+      >
         <div
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
           className={`${
             theme === "dark" ? "bg-[#27374D]" : "bg-white"
-          } md:rounded-2xl lg:w-[40%] md:w-[70%] w-full lg:ml-80 mt-[-60px] shadow-2xl`}
+          } md:rounded-2xl lg:w-[40%] md:w-[70%] w-full shadow-2xl`}
         >
           <div className="flex justify-between p-3 border-b">
             <span>
@@ -124,7 +165,7 @@ function TicketModal() {
               <CloseIcon />
             </button>
           </div>
-          <div className="flex p-5 flex-col space-y-3 border-b overflow-auto">
+          <div className="flex p-5 flex-col space-y-3 border-b overflow-auto max-h-[450px] lg:max-h-[500px]">
             <span>Ticket Title</span>
             <TextField
               id="outlined-basic"
@@ -189,17 +230,22 @@ function TicketModal() {
                 </FormControl>
               </>
             )}
-            <span>Due Date</span>
-            <TextField
-              id="outlined-basic"
-              className="w-full"
-              size="small"
-              variant="outlined"
-              onChange={handleChange}
-              type="date"
-              name="dueDate"
-              value={ticket.dueDate}
-            />
+            <div>
+              <span>Due Date</span>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={["DatePicker"]}>
+                  <DatePicker
+                    value={ticket.dueDate}
+                    name="dueDate"
+                    onChange={(date) =>
+                      handleChange({ target: { value: date } })
+                    }
+                    className="w-full"
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+            </div>
+
             <span>Assignee</span>
             <FormControl>
               <Select
@@ -221,19 +267,19 @@ function TicketModal() {
               onClick={() => {
                 dispatch(setShowTicket({ value: false, type: "" }));
               }}
-              className="bg-red-500 hover:bg-red-700 p-2 rounded-lg text-white"
+              className="bg-red-500 hover:bg-red-700 py-2 px-3 rounded-full text-white"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
-              className="bg-sky-600 hover:bg-sky-800 p-2 rounded-lg text-white"
+              className="bg-sky-600 hover:bg-sky-800 py-2 px-3 rounded-full text-white"
             >
               {editCondition ? "Save" : "Create Ticket"}
             </button>
           </div>
         </div>
-      </div>
+      </Backdrop>
     </>
   );
 }
