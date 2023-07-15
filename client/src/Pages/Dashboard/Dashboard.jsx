@@ -15,6 +15,7 @@ import Sidebar from "../../Components/Sidebar/Sidebar";
 import CustomDialog from "../../Components/Common/CustomDialog";
 import CustomNavigation from "../../Components/Common/CustomNavigation";
 import BoardView from "../../Components/BoardView/BoardView";
+import TicketDetails from "../../Components/TicketDetails/TicketDetails";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -40,13 +41,14 @@ const Dashboard = () => {
   const [showProjectDialog, setShowProjectDialog] = useState(false);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const showBoardView = boardView ?? false
+  const showBoardView = boardView ?? false;
+  const showTask = useSelector((state)=> state.nonPersistant.showTask)
 
   useEffect(() => {
     if (!localStorage.getItem("apiKey")) {
       navigate("/login");
     }
-    if (!selectedProject) setShowProjectDialog(true)
+    if (!selectedProject) setShowProjectDialog(true);
     axios
       .get(`${API_URL}/projects/${user.id}`)
       .then((response) => {
@@ -59,12 +61,12 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     axios
       .get(`${API_URL}/tasks/${selectedProject}`)
       .then((response) => {
         setTasks(response.data);
-        setLoading(false)
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -85,6 +87,8 @@ const Dashboard = () => {
         type={snackbar.type}
         message={snackbar.message}
       />
+      {showTask && <TicketDetails />}
+
       <div>
         <Sidebar
           setShowProjectDialog={setShowProjectDialog}
@@ -118,7 +122,6 @@ const Dashboard = () => {
             <div>
               <BoardView tasks={filteredTasks} loading={loading} />
             </div>
-            
           ) : (
             <CustomAccordion tasks={filteredTasks} loading={loading} />
           )}

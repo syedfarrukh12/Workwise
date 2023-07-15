@@ -47,3 +47,8 @@ export const checkEmail = (email) => {
   const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   return emailRegex.test(email);
 };
+
+export const getInitials = (name) => {
+  const words = name.split(/(?=[A-Z])/);
+  return words.map((word) => word[0]).join("");
+};

@@ -10,8 +10,14 @@ import { TaskPriority } from "../utils";
 import axios from "axios";
 import { API_URL } from "../Common/apiConfig";
 import { useDispatch, useSelector } from "react-redux";
-import { setOpenAlert, setShowTicket, setSelectedTask, deleteSelectedTask } from "../../redux/nonPersistant";
-import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import {
+  setOpenAlert,
+  setShowTicket,
+  setSelectedTask,
+  deleteSelectedTask,
+  setShowTask,
+} from "../../redux/nonPersistant";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 
 function TicketCard({ task }) {
   const dispatch = useDispatch();
@@ -39,15 +45,14 @@ function TicketCard({ task }) {
             type: "success",
           })
         );
-        dispatch(deleteSelectedTask(task._id))
+        dispatch(deleteSelectedTask(task._id));
       });
-      
   };
 
   const handleUpdateTicket = () => {
     setAnchorEl(null);
     dispatch(setSelectedTask(task));
-    dispatch(setShowTicket({value:true, type: 'edit'}));
+    dispatch(setShowTicket({ value: true, type: "edit" }));
   };
 
   const handleUpdateVisibility = () => {
@@ -102,7 +107,15 @@ function TicketCard({ task }) {
                 )}
                 {/* <Checkbox defaultChecked onChange={()=>{setVisible(!visible)}}/> */}
               </div>
-              <div className="font-bold">{task.name}</div>
+              <div
+                onClick={() => {
+                  dispatch(setShowTask(true));
+                  dispatch(setSelectedTask(task));
+                }}
+                className="font-bold"
+              >
+                {task.name}
+              </div>
             </div>
 
             <div className="ml-auto">

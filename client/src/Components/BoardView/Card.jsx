@@ -7,6 +7,7 @@ import {
   deleteSelectedTask,
   setOpenAlert,
   setSelectedTask,
+  setShowTask,
   setShowTicket,
 } from "../../redux/nonPersistant";
 import { useDispatch, useSelector } from "react-redux";
@@ -75,7 +76,13 @@ function Card({ task }) {
         }`}
       >
         <div className="border-b border-[#a4b7c6] flex-grow">
-          <div className="font-semibold h-[120px] max-h-[150px] overflow-hidden">
+          <div
+            onClick={() => {
+              dispatch(setShowTask(true));
+              dispatch(setSelectedTask(task));
+            }}
+            className="font-semibold h-[120px] max-h-[150px] overflow-hidden"
+          >
             {task.name}
           </div>
         </div>
@@ -100,19 +107,19 @@ function Card({ task }) {
           />
         </div>
         <div
-          className={`flex justify-end gap-2  ${
+          className={`flex justify-end gap-1  ${
             isHovered ? "visible" : "hidden"
           }`}
         >
           <div
             onClick={handleDeleteTicket}
-            className="p-2 rounded-md hover:bg-[#a4b7c6] hover:text-[#000]  w-6 h-6 flex items-center justify-center cursor-pointer"
+            className="p-2 rounded-full hover:bg-black/30 w-6 h-6 flex items-center justify-center cursor-pointer"
           >
             <DeleteIcon className="!h-5 !w-5" />
           </div>
           <div
             onClick={handleUpdateTicket}
-            className="p-2 rounded-md hover:bg-[#a4b7c6] hover:text-[#000]  w-6 h-6 flex items-center justify-center cursor-pointer"
+            className="p-2 rounded-full hover:bg-black/30 w-6 h-6 flex items-center justify-center cursor-pointer"
           >
             <EditIcon className="!h-5 !w-5" />
           </div>

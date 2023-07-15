@@ -54,13 +54,13 @@ function CreateProject() {
           e.stopPropagation();
         }}
         className={`${
-          theme === "dark" ? "bg-[#27374D]" : "bg-white"
+          theme === "dark" ? "bg-[#27374D]" : "bg-[#DDE6ED]"
         } md:rounded-2xl lg:w-[40%] md:w-[70%] w-full shadow-2xl`}
       >
         <div className="flex justify-between p-3 border-b">
           <span>Create Project</span>
-          <button onClick={handleClose} className="bg-none">
-            <CloseIcon />
+          <button onClick={handleClose} className="cursor-pointer hover:bg-black/10 w-fit rounded-full ml-auto">
+            <CloseIcon className="!w-5 !h-5"/>
           </button>
         </div>
         <div className="flex p-5 flex-col space-y-3 border-b overflow-auto">

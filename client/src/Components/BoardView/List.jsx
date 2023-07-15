@@ -77,8 +77,8 @@ function BoardList({ status, tasks, loading }) {
     <animated.div
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => {
-        setHover(false)
-        setShowAddTicket(false)
+        setHover(false);
+        setShowAddTicket(false);
       }}
       style={styles}
       className={`flex flex-col p-3 w-[216px] justify-start overflow-y-auto h-[84vh] my-2 rounded-md ${
@@ -88,45 +88,47 @@ function BoardList({ status, tasks, loading }) {
       <div className="font-semibold text-center">
         {camelCaseToSentenceCase(status)}
       </div>
-      {hover && (
-        <>
-          {showAddTicket ? (
-            <div className="mt-2 flex items-center space-x-1">
-              <TextField
-                size="small"
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                }}
-                type="text"
-                className="w-full p-1 border rounded-md bg-transparent focus:outline-none"
-                placeholder="Ticket Title"
-                variant="outlined"
-              />
-              <button
-                onClick={() => handleSubmit(status)}
-                className="p-2 rounded-md hover:bg-[#a4b7c6] hover:text-[#000] w-5 h-5 flex items-center justify-center cursor-pointer"
-              >
-                <AddIcon className="!w-5 !h-5" />
-              </button>
-            </div>
-          ) : (
-            <div className="mt-2 flex items-center justify-between border p-1 rounded-md">
-              <div>Add a new Ticket</div>
-              <button
-                onClick={() => setShowAddTicket(true)}
-                className="p-2 rounded-md hover:bg-[#a4b7c6] hover:text-[#000] w-5 h-5 flex items-center justify-center cursor-pointer"
-              >
-                <AddIcon className="!w-5 !h-5" />
-              </button>
-            </div>
-          )}
-        </>
-      )}
+      <div>
+        {hover && (
+          <div className="mt-1">
+            {showAddTicket ? (
+              <div className="flex items-center space-x-1">
+                <TextField
+                  size="small"
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                  }}
+                  type="text"
+                  className="w-full p-1 border rounded-md bg-transparent focus:outline-none"
+                  placeholder="Ticket Title"
+                  variant="outlined"
+                />
+                <button
+                  onClick={() => handleSubmit(status)}
+                  className="p-2 rounded-md hover:bg-[#a4b7c6] hover:text-[#000] w-5 h-5 flex items-center justify-center cursor-pointer"
+                >
+                  <AddIcon className="!w-5 !h-5" />
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between border border-[#a4b7c6] p-1 rounded-md">
+                <div>Add a new Ticket</div>
+                <button
+                  onClick={() => setShowAddTicket(true)}
+                  className="p-2 rounded-md hover:bg-[#a4b7c6] hover:text-[#000] w-5 h-5 flex items-center justify-center cursor-pointer"
+                >
+                  <AddIcon className="!w-5 !h-5" />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       {loading ? (
         <CardSkeleton />
       ) : (
-        <div className="flex flex-col flex-grow overflow-auto mt-2">
+        <div className="flex flex-col flex-grow overflow-auto mt-2 ">
           {groupedTasks[status]?.length > 0 ? (
             groupedTasks[status].map((task) => (
               <div key={task._id}>
@@ -134,7 +136,7 @@ function BoardList({ status, tasks, loading }) {
               </div>
             ))
           ) : (
-            <div className="text-sm text-center mt-5">
+            <div className="text-sm text-center">
               No tasks in this section
             </div>
           )}
