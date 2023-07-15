@@ -66,7 +66,6 @@ function CustomAccordion({ tasks, loading }) {
       assignee: current_user.id,
       project: selectedProject._id,
     };
-    console.log(ticket);
     axios
       .post(`${API_URL}/task`, ticket)
       .then((response) => {
@@ -79,15 +78,15 @@ function CustomAccordion({ tasks, loading }) {
         );
         dispatch(setShowTicket({ value: false, type: "" }));
         dispatch(addTask(response.data));
+        setShowAddTicket({ value: false, status: "" });
       })
       .catch((error) => {
         dispatch(setOpenAlert({ value: true, message: error, type: "error" }));
       });
   };
 
-  console.log(groupedTasks["new"]);
   return (
-    <animated.div style={styles} className="px-3">
+    <animated.div style={styles} className="px-3 !pb-3">
       {Object.values(TaskStatus).map((status) => (
         <Accordion
           onMouseEnter={() => setHover({ value: true, status: status })}

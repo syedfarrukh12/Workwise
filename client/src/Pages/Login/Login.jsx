@@ -5,6 +5,7 @@ import { API_URL } from "../../Components/Common/apiConfig.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/user.js";
+import { checkEmail } from "../../Components/utils.js";
 
 const Login = ({ setIsLoggedIn }) => {
   const dispatch = useDispatch();
@@ -31,6 +32,10 @@ const Login = ({ setIsLoggedIn }) => {
       email: user.email,
       password: user.password,
     };
+    if (!checkEmail(data.email)) {
+      setOpen(true);
+      return setSnackbarContent({ type: "error", content: 'Please enter a valid Email' });
+    }
 
     axios
       .post(`${API_URL}/login`, data)
@@ -123,7 +128,9 @@ const Login = ({ setIsLoggedIn }) => {
               or{" "}
               <Link
                 className={`underline ${
-                  theme === "dark" ? " text-[#DDE6ED] hover:text-[#a9b3bb]" : " text-[#27374D] hover:text-[#16253c]"
+                  theme === "dark"
+                    ? " text-[#DDE6ED] hover:text-[#a9b3bb]"
+                    : " text-[#27374D] hover:text-[#16253c]"
                 }`}
                 to="/signup"
               >

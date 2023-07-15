@@ -10,6 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch } from "react-redux";
 import { resetStore } from "../../redux/store";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 function Navbar({ setIsLoggedIn }) {
   const navigate = useNavigate();
@@ -60,9 +61,6 @@ function Navbar({ setIsLoggedIn }) {
           </NavLink>
 
           <div className="flex flex-row space-x-4 items-center">
-            <NavLink to="/" className="cursor-pointer">
-              Home
-            </NavLink>
             {/* <NavLink to="/projects" className="cursor-pointer">
               Projects
             </NavLink> */}
@@ -77,6 +75,13 @@ function Navbar({ setIsLoggedIn }) {
               />
               <DarkModeIcon />
             </div>
+            <button
+              className="bg-white/20 px-3 py-2 rounded-full font-semibold flex"
+              onClick={handleLogout}
+            >
+              <LogoutIcon className="!w-5 !h-5" />
+              <span className="lg:flex hidden ml-2">Logout</span>
+            </button>
             <div>
               <IconButton
                 aria-label="more"
@@ -104,17 +109,16 @@ function Navbar({ setIsLoggedIn }) {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                <MenuItem>
-                  <div className="items-center flex sm:hidden">
+                <div className="items-center flex sm:hidden">
+                  <MenuItem>
                     <LightModeIcon />
                     <Switch
                       onChange={handleThemeToggle}
                       defaultChecked={currentTheme === "dark"}
                     />
                     <DarkModeIcon />
-                  </div>
-                </MenuItem>
+                  </MenuItem>
+                </div>
               </Menu>
             </div>
           </div>

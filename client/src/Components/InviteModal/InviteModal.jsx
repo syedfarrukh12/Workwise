@@ -5,6 +5,7 @@ import axios from "axios";
 import { API_URL } from "../Common/apiConfig";
 import { useDispatch } from "react-redux";
 import { setOpenAlert, setShowInvite } from "../../redux/nonPersistant";
+import { checkEmail } from "../utils";
 
 function InviteModal() {
   const dispatch = useDispatch();
@@ -12,6 +13,9 @@ function InviteModal() {
   const [email, setEmail] = useState("");
 
   const handleSubmit = () => {
+    if (!checkEmail(email)) {
+      return dispatch(setOpenAlert({ value: true, message: "Email is Invalid.", type: 'error' }));
+    }
     axios
       .post(`${API_URL}/invite`, { email: email })
       .then((response) => {
@@ -36,6 +40,7 @@ function InviteModal() {
         style={{ zIndex: 30 }}
       >
         <div
+          onClick={(e) => e.stopPropagation()}
           className={`${
             theme === "dark" ? "bg-[#27374D]" : "bg-white"
           } md:rounded-2xl lg:w-[30%] md:w-[50%]  w-full shadow-2xl`}

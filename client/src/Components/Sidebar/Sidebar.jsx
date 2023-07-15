@@ -18,9 +18,9 @@ function Sidebar({ setShowProjectDialog, showProjectDialog }) {
 
   return (
     <div
-      className={`flex flex-col text-sm space-y-3 ${
+      className={`flex flex-col text-sm shadow-lg space-y-3 ${
         theme === "dark" ? "bg-[#20324c]" : "bg-[#eaf2f8]"
-      } p-3 fixed top-14 pt-4 left-0 h-[93.5%] w-[15%] hidden lg:flex`}
+      } p-3 fixed top-14 pt-4 left-0 h-[93.5%] w-[15%] hidden lg:flex z-10 `}
     >
       <div className="space-y-3 justify-start flex flex-col">
         <div

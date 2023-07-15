@@ -52,7 +52,7 @@ function CustomNavigation({ setQuery, query }) {
           </div>
         </div>
 
-        <div className="ml-auto">
+        <div className="ml-auto w-full sm:w-fit">
           <TextField
             id="outlined-basic"
             className="w-full !mt-[2px]"

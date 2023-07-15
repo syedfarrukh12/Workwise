@@ -27,8 +27,7 @@ function App() {
       <div
         style={{
           backgroundColor: theme === "dark" ? "#27374D" : "#DDE6ED",
-          color: theme === "dark" ? "#DDE6ED" : "#27374D",
-          height: "93vh",
+          color: theme === "dark" ? "#DDE6ED" : "#27374D"
         }}
       >
         <Router>

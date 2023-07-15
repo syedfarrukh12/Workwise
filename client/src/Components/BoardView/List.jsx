@@ -12,6 +12,7 @@ import {
   setOpenAlert,
   setShowTicket,
 } from "../../redux/nonPersistant";
+import { TextField } from "@mui/material";
 
 function BoardList({ status, tasks, loading }) {
   const theme = localStorage.getItem("theme");
@@ -75,7 +76,10 @@ function BoardList({ status, tasks, loading }) {
   return (
     <animated.div
       onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      onMouseLeave={() => {
+        setHover(false)
+        setShowAddTicket(false)
+      }}
       style={styles}
       className={`flex flex-col p-3 w-[216px] justify-start overflow-y-auto h-[84vh] my-2 rounded-md ${
         theme === "dark" ? "bg-[#223145]" : "bg-[#eaf2f8]"
@@ -88,19 +92,21 @@ function BoardList({ status, tasks, loading }) {
         <>
           {showAddTicket ? (
             <div className="mt-2 flex items-center space-x-1">
-              <input
+              <TextField
+                size="small"
                 onChange={(e) => {
                   setTitle(e.target.value);
                 }}
                 type="text"
                 className="w-full p-1 border rounded-md bg-transparent focus:outline-none"
                 placeholder="Ticket Title"
+                variant="outlined"
               />
               <button
                 onClick={() => handleSubmit(status)}
                 className="p-2 rounded-md hover:bg-[#a4b7c6] hover:text-[#000] w-5 h-5 flex items-center justify-center cursor-pointer"
               >
-                <AddIcon className="!w-5 !h-5"/>
+                <AddIcon className="!w-5 !h-5" />
               </button>
             </div>
           ) : (
@@ -110,7 +116,7 @@ function BoardList({ status, tasks, loading }) {
                 onClick={() => setShowAddTicket(true)}
                 className="p-2 rounded-md hover:bg-[#a4b7c6] hover:text-[#000] w-5 h-5 flex items-center justify-center cursor-pointer"
               >
-                <AddIcon className="!w-5 !h-5"/>
+                <AddIcon className="!w-5 !h-5" />
               </button>
             </div>
           )}
