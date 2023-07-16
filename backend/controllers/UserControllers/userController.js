@@ -1,5 +1,7 @@
 import User from "../../models/userSchema.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
 
 export const getUsers = (req, res, next) => {
   User.find()
@@ -32,52 +34,43 @@ export const getUser = async (req, res, next) => {
 export const createUser = async (req, res, next) => {
   const { name, username, email, password, role } = req.body;
 
-  const saltRounds = 10;
-  bcrypt.genSalt(saltRounds, (err, salt) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send("An error occurred while creating the user");
-    }
+  try {
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(password, salt);
 
-    bcrypt.hash(password, salt, (err, hash) => {
-      if (err) {
-        console.error(err);
-        return res
-          .status(500)
-          .send("An error occurred while creating the user");
-      }
-
-      const newUser = new User({
-        name,
-        username: username.toLowerCase(),
-        email,
-        password: hash,
-        role,
-      });
-
-      newUser
-        .save()
-        .then(() => {
-          res.status(200).send("User created successfully");
-        })
-        .catch((error) => {
-          console.error(error);
-          if (error.code === 11000 && error.keyValue && error.keyValue.email) {
-            res.status(400).json("Email already exists");
-          }
-          if (
-            error.code === 11000 &&
-            error.keyValue &&
-            error.keyValue.username
-          ) {
-            res.status(400).json("Username already exists");
-          } else {
-            res.status(500).send("An error occurred while creating the user");
-          }
-        });
+    const newUser = new User({
+      name,
+      username: username.toLowerCase(),
+      email,
+      password: hash,
+      role,
     });
-  });
+
+    await newUser.save();
+    const token = jwt.sign({ userId: newUser._id }, process.env.TOKEN_SECRET, {
+      expiresIn: "1h",
+    });
+    res.cookie("token", token, {
+      httpOnly: true,
+    });
+
+    res.status(200).json({
+      user: newUser,
+      token: token,
+    });
+  } catch (error) {
+    console.error(error);
+    if (error.code === 11000 && error.keyValue && error.keyValue.email) {
+      res.status(400).json("Email already exists");
+    } else if (error.code === 11000 && error.keyValue && error.keyValue.username) {
+      res.status(400).json("Username already exists");
+    } else {
+      res.status(500).send("An error occurred while creating the user");
+    }
+  }
 };
+
 
 export const login = (req, res, next) => {
   const { email, password } = req.body;
@@ -87,15 +80,22 @@ export const login = (req, res, next) => {
       if (!user) {
         return res.status(404).json("User not found");
       }
-
       bcrypt.compare(password, user.password, (err, result) => {
         if (err) {
           console.error(err);
           return res.status(500).json("An error occurred while logging in");
         }
-
         if (result) {
-          res.status(200).json(user);
+          const token = jwt.sign({ userId: user._id }, process.env.TOKEN_SECRET, {
+            expiresIn: "1h",
+          });
+          res.cookie("token", token, {
+            httpOnly: true,
+          });
+          res.status(200).json({
+            user: user,
+            token: token,
+          });
         } else {
           res.status(401).json("Invalid password");
         }
@@ -105,6 +105,7 @@ export const login = (req, res, next) => {
       res.status(500).send("An error occurred while logging in");
     });
 };
+
 
 export const updateUser = (req, res, next) => {
   const { name, email, username, password, role } = req.body;

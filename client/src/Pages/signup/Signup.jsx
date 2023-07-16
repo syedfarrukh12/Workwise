@@ -8,10 +8,13 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { isValidEmail } from "../../Components/utils.js";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/user.js";
 
 const Signup = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
   const theme = localStorage.getItem('theme')
+  const dispatch = useDispatch()
   const [confirmPassword, setConfirmPassword] = useState("");
   const [open, setOpen] = useState(false);
   const [snackbarContent, setSnackbarContent] = useState({
@@ -50,9 +53,11 @@ const Signup = ({ setIsLoggedIn }) => {
         .post(`${API_URL}/signup`, user)
         .then((response) => {
           console.log(response.data);
-          localStorage.setItem("apiKey", "true");
+          localStorage.setItem("apiKey", response.data.token);
           navigate("/");
           setIsLoggedIn(true);
+          const { name, email, username, role, _id } = response.data.user;
+          dispatch(login({ name, email, username, role, id: _id }));
         })
         .catch((error) => {
           console.log(error);

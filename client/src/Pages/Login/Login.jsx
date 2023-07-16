@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../../redux/user.js";
 import { checkEmail } from "../../Components/utils.js";
 
+
 const Login = ({ setIsLoggedIn }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,11 +41,12 @@ const Login = ({ setIsLoggedIn }) => {
     axios
       .post(`${API_URL}/login`, data)
       .then((response) => {
+        console.log(response)
         if (response.status === 200) {
           setIsLoggedIn(true);
           navigate("/");
-          localStorage.setItem("apiKey", response.data._id);
-          const { name, email, username, role, _id } = response.data;
+          localStorage.setItem("apiKey", response.data.token);
+          const { name, email, username, role, _id } = response.data.user;
           dispatch(login({ name, email, username, role, id: _id }));
         }
       })
