@@ -234,12 +234,15 @@ function TicketModal() {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DatePicker"]}>
                   <DatePicker
-                    value={ticket.dueDate}
-                    name="dueDate"
-                    onChange={(date) =>
-                      handleChange({ target: { value: date } })
-                    }
                     className="w-full"
+                    size="small"
+                    value={ticket.dueDate}
+                    onChange={(newValue) =>
+                      setTicket((prev) => ({
+                        ...prev,
+                        dueDate: newValue,
+                      }))
+                    }
                   />
                 </DemoContainer>
               </LocalizationProvider>

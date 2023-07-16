@@ -42,7 +42,7 @@ const Dashboard = () => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const showBoardView = boardView ?? false;
-  const showTask = useSelector((state)=> state.nonPersistant.showTask)
+  const showTask = useSelector((state) => state.nonPersistant.showTask);
 
   useEffect(() => {
     if (!localStorage.getItem("apiKey")) {
@@ -90,10 +90,7 @@ const Dashboard = () => {
       {showTask && <TicketDetails />}
 
       <div>
-        <Sidebar
-          setShowProjectDialog={setShowProjectDialog}
-          showProjectDialog={showProjectDialog}
-        />
+        <Sidebar setShowProjectDialog={setShowProjectDialog} />
       </div>
       <div className="lg:ml-[15%]">
         <div className="sticky top-14 z-10">

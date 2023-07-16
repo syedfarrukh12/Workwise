@@ -109,6 +109,7 @@ function Navbar({ setIsLoggedIn }) {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>Edit Project</MenuItem>
                 <div className="items-center flex sm:hidden">
                   <MenuItem>
                     <LightModeIcon />

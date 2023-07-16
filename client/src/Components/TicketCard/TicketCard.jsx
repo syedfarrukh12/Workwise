@@ -6,7 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import FlagIcon from "@mui/icons-material/Flag";
-import { TaskPriority } from "../utils";
+import { TaskPriority, formatDate } from "../utils";
 import axios from "axios";
 import { API_URL } from "../Common/apiConfig";
 import { useDispatch, useSelector } from "react-redux";
@@ -112,9 +112,13 @@ function TicketCard({ task }) {
                   dispatch(setShowTask(true));
                   dispatch(setSelectedTask(task));
                 }}
-                className="font-bold"
               >
-                {task.name}
+                <div className="font-bold">{task.name}</div>
+                {task.dueDate && (
+                  <div className={`text-xs ${theme === 'dark' ? 'text-white/50' : 'text-black/50'}`}>
+                    Due Date: {formatDate(task.dueDate)}
+                  </div>
+                )}
               </div>
             </div>
 
