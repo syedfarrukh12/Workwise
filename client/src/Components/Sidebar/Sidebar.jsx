@@ -29,23 +29,24 @@ function Sidebar({ setShowProjectDialog, showProjectDialog }) {
         >
           {selectedProject.name}
         </div>
-        {currentUser.role === "manager" && (
-          <button
-            onClick={() => {
-              dispatch(setShowInvite(false));
-              dispatch(setShowTicket({ value: false, type: "" }));
-              dispatch(setShowCreateProject(true));
-            }}
-            className={`cursor-pointer py-2 px-4 justify-center flex items-center space-x-1 rounded-full ${
-              theme === "dark"
-                ? "bg-white/10 hover:bg-white/20 :"
-                : "bg-black/10 hover:bg-black/20"
-            }`}
-          >
-            <AddIcon style={{ width: "15px", height: "15px" }} />
-            <span className="hidden md:inline">Create Project</span>
-          </button>
-        )}
+        {currentUser.role === "manager" ||
+          (currentUser.role === "admin" && (
+            <button
+              onClick={() => {
+                dispatch(setShowInvite(false));
+                dispatch(setShowTicket({ value: false, type: "" }));
+                dispatch(setShowCreateProject(true));
+              }}
+              className={`cursor-pointer py-2 px-4 justify-center flex items-center space-x-1 rounded-full ${
+                theme === "dark"
+                  ? "bg-white/10 hover:bg-white/20 :"
+                  : "bg-black/10 hover:bg-black/20"
+              }`}
+            >
+              <AddIcon style={{ width: "15px", height: "15px" }} />
+              <span className="hidden md:inline">Create Project</span>
+            </button>
+          ))}
 
         {Object.keys(selectedProject).length !== 0 && (
           <button

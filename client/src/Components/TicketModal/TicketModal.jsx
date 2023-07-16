@@ -1,5 +1,6 @@
 import {
   Backdrop,
+  Divider,
   FormControl,
   MenuItem,
   Select,
@@ -70,7 +71,7 @@ function TicketModal() {
 
   const handleSubmit = () => {
     console.log(ticket);
-    console.log(selectedProject)
+    console.log(selectedProject);
     if (!ticket.project) {
       return dispatch(
         setOpenAlert({
@@ -80,10 +81,7 @@ function TicketModal() {
         })
       );
     }
-    if (
-      !ticket.name ||
-      !ticket.priority
-    ) {
+    if (!ticket.name || !ticket.priority) {
       return dispatch(
         setOpenAlert({
           value: true,
@@ -151,7 +149,7 @@ function TicketModal() {
             theme === "dark" ? "bg-[#27374D]" : "bg-[#DDE6ED]"
           } md:rounded-2xl lg:w-[40%] md:w-[70%] w-full shadow-2xl`}
         >
-          <div className="flex justify-between p-3 border-b">
+          <div className="flex justify-between p-3">
             <span>
               {editCondition ? "Edit Ticket" : "Create Ticket"} for{" "}
               {selectedProject.name}
@@ -162,10 +160,11 @@ function TicketModal() {
               }}
               className="cursor-pointer hover:bg-black/10 w-fit rounded-full ml-auto"
             >
-              <CloseIcon className="!w-5 !h-5"/>
+              <CloseIcon className="!w-5 !h-5" />
             </button>
           </div>
-          <div className="flex p-5 flex-col space-y-3 border-b overflow-auto max-h-[450px] lg:max-h-[500px]">
+          <Divider />
+          <div className="flex p-5 flex-col space-y-3 overflow-auto max-h-[450px] lg:max-h-[500px]">
             <span>Ticket Title</span>
             <TextField
               id="outlined-basic"
@@ -262,6 +261,7 @@ function TicketModal() {
               </Select>
             </FormControl>
           </div>
+          <Divider />
           <div className="p-3 space-x-3 justify-end flex">
             <button
               onClick={() => {

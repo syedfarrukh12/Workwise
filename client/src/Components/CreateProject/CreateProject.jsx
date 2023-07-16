@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import { TextField, Backdrop } from "@mui/material";
+import { TextField, Backdrop, Divider } from "@mui/material";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { API_URL } from "../Common/apiConfig";
@@ -57,13 +57,14 @@ function CreateProject() {
           theme === "dark" ? "bg-[#27374D]" : "bg-[#DDE6ED]"
         } md:rounded-2xl lg:w-[40%] md:w-[70%] w-full shadow-2xl`}
       >
-        <div className="flex justify-between p-3 border-b">
+        <div className="flex justify-between p-3">
           <span>Create Project</span>
           <button onClick={handleClose} className="cursor-pointer hover:bg-black/10 w-fit rounded-full ml-auto">
             <CloseIcon className="!w-5 !h-5"/>
           </button>
         </div>
-        <div className="flex p-5 flex-col space-y-3 border-b overflow-auto">
+        <Divider />
+        <div className="flex p-5 flex-col space-y-3 overflow-auto">
           <span>Project Title</span>
           <TextField
             id="outlined-basic"
@@ -116,6 +117,7 @@ function CreateProject() {
             </LocalizationProvider>
           </div>
         </div>
+        <Divider />
         <div className="p-3 space-x-3 justify-end flex">
           <button
             onClick={handleClose}

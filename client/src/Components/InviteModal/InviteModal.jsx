@@ -1,4 +1,4 @@
-import { Backdrop, TextField } from "@mui/material";
+import { Backdrop, Divider, TextField } from "@mui/material";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
@@ -45,7 +45,7 @@ function InviteModal() {
             theme === "dark" ? "bg-[#27374D]" : "bg-[#DDE6ED]"
           } md:rounded-2xl lg:w-[30%] md:w-[50%]  w-full shadow-2xl`}
         >
-          <div className="flex justify-between p-3 border-b">
+          <div className="flex justify-between p-3">
             <span>Invite People</span>
             <button
               onClick={() => {
@@ -56,7 +56,8 @@ function InviteModal() {
               <CloseIcon className="!w-5 !h-5"/>
             </button>
           </div>
-          <div className="p-5 border-b">
+          <Divider />
+          <div className="p-5">
             <span>Email</span>
             <TextField
               id="outlined-basic"
@@ -71,6 +72,7 @@ function InviteModal() {
               }}
             />
           </div>
+          <Divider />
           <div className="p-3 space-x-3 justify-end flex">
             <button
               onClick={() => {

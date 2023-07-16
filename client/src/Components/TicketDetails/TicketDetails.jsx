@@ -51,6 +51,8 @@ function TicketDetails() {
   }, []);
 
   const handleComment = () => {
+    setEditorState(EditorState.createEmpty());
+    setAddComment(false);
     const comment = {
       text: getTextFromEditor(),
       author: currentUser.id,
@@ -104,7 +106,7 @@ function TicketDetails() {
                 </div>
               ))}
 
-              <div className="flex justify-between !mt-5">
+              <div className="flex justify-between !mt-5 bg-black/20 p-2 rounded-lg">
                 <div className="flex items-center space-x-2">
                   <div>
                     {selectedTask.visible ? (
@@ -117,12 +119,12 @@ function TicketDetails() {
                     <div
                       className={`rounded-full px-2 border-2 ${
                         selectedTask.priority === TaskPriority.Low
-                          ? " border-[#388E3C]"
+                          ? "text-[#388E3C] border-[#388E3C]"
                           : selectedTask.priority === TaskPriority.Medium
-                          ? " border-[#FFEB3B]"
+                          ? "text-[#FFEB3B] border-[#FFEB3B]"
                           : selectedTask.priority === TaskPriority.High
-                          ? " border-[#FF9800]"
-                          : " border-[#F44336]"
+                          ? "text-[#FF9800] border-[#FF9800]"
+                          : "text-[#F44336] border-[#F44336]"
                       }`}
                     >
                       {camelCaseToSentenceCase(selectedTask.priority)}
