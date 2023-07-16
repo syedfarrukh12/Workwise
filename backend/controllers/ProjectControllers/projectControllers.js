@@ -3,7 +3,7 @@ import Project from "../../models/projectSchema.js";
 export const getProjects = async (req, res, next) => {
   try {
     const userId = req.params.userId
-    const projects = await Project.find({createdBy: userId});
+    const projects = await Project.find({createdBy: userId}).populate('users', 'name');
     if (projects){
       res.status(200).json(projects);
     }else{
@@ -20,7 +20,7 @@ export const getProject = async (req, res, next) => {
   const id = req.params.id;
   const userId = req.params.userId;
 
-  Project.findOne({_id: id, createdBy: userId})
+  Project.findOne({_id: id, createdBy: userId}).populate('users', 'name')
     .then((project) => {
       if (!project) {
         res.status(404).json("Project not found");

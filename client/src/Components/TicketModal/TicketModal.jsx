@@ -21,6 +21,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import project from "../../redux/project";
 
 function TicketModal() {
   const dispatch = useDispatch();
@@ -55,7 +56,7 @@ function TicketModal() {
           priority: "",
           project: currentProject._id,
           dueDate: "",
-          assignee: currentUser.id,
+          assignee: [currentUser.id],
           createdAt: Date.now(),
           createdBy: currentUser.id,
         }
@@ -249,6 +250,7 @@ function TicketModal() {
             </div>
 
             <span>Assignee</span>
+            {console.log(selectedProject)}
             <FormControl>
               <Select
                 labelId="demo-simple-select-label"
@@ -258,9 +260,11 @@ function TicketModal() {
                 size="small"
                 name="assignee"
               >
-                <MenuItem value={currentUser.id}>Ali</MenuItem>
-                <MenuItem value={currentUser.id}>Ahmad</MenuItem>
-                <MenuItem value={currentUser.id}>Murtaza</MenuItem>
+                {selectedProject.users.map((assignee) => (
+                  <MenuItem key={assignee._id} value={assignee._id}>
+                    {assignee.name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </div>

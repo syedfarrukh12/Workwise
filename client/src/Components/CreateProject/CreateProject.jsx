@@ -32,7 +32,7 @@ function CreateProject() {
   };
 
   const handleSubmit = () => {
-    console.log(project);
+    console.log("Project", project);
     axios
       .post(`${API_URL}/project`, project)
       .then(() => {
@@ -59,8 +59,11 @@ function CreateProject() {
       >
         <div className="flex justify-between p-3">
           <span>Create Project</span>
-          <button onClick={handleClose} className="cursor-pointer hover:bg-black/10 w-fit rounded-full ml-auto">
-            <CloseIcon className="!w-5 !h-5"/>
+          <button
+            onClick={handleClose}
+            className="cursor-pointer hover:bg-black/10 w-fit rounded-full ml-auto"
+          >
+            <CloseIcon className="!w-5 !h-5" />
           </button>
         </div>
         <Divider />
@@ -94,10 +97,14 @@ function CreateProject() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DatePicker"]}>
                 <DatePicker
-                  name="startDate"
-                  onChange={(date) => handleChange({ target: { value: date } })}
                   className="w-full"
-                  label="Start date"
+                  size="small"
+                  onChange={(newValue) =>
+                    setProject((prev) => ({
+                      ...prev,
+                      startDate: newValue,
+                    }))
+                  }
                 />
               </DemoContainer>
             </LocalizationProvider>
@@ -106,12 +113,15 @@ function CreateProject() {
             <span>End Date</span>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DatePicker"]}>
-                <DatePicker
-                  name="endDate"
-                  // value={ticket.dueDate}
-                  onChange={(date) => handleChange({ target: { value: date } })}
+              <DatePicker
                   className="w-full"
-                  label="End date"
+                  size="small"
+                  onChange={(newValue) =>
+                    setProject((prev) => ({
+                      ...prev,
+                      endDate: newValue,
+                    }))
+                  }
                 />
               </DemoContainer>
             </LocalizationProvider>
