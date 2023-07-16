@@ -19,7 +19,7 @@ function CustomDialog({ open, setOpen, projects }) {
     <>
       <div>
         <Dialog onClose={handleClose} open={open}>
-          <DialogTitle>Select Project to start work</DialogTitle>
+          <DialogTitle>Select project to start work</DialogTitle>
           <List sx={{ pt: 0 }}>
             {projects?.map((project) => (
               <ListItem disableGutters disablePadding key={project._id}>

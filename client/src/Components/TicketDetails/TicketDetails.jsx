@@ -89,7 +89,7 @@ function TicketDetails() {
           <div className={`flex flex-col lg:flex-row`}>
             <TicketInfo selectedTask={selectedTask} />
             <Divider orientation="vertical" flexItem />
-            <div className={`w-full lg:w-[50%] px-2`} name="comment">
+            <div className={`w-full lg:w-[40%] px-2`} name="comment">
               <div className="font-semibold text-center">Comments</div>
               <div className="overflow-y-auto overflow-x-hidden max-h-[45vh] lg:max-h-[53vh]">
                 {comments.map((comment) => (
