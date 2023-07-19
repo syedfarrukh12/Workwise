@@ -101,7 +101,7 @@ function TicketCard({ task }) {
                   }`}
                 />
               </Tooltip>
-              <div className="flex items-center h-5">
+              <div className=" hidden lg:flex items-center h-5">
                 {visible ? (
                   <VisibilityIcon onClick={handleUpdateVisibility} />
                 ) : (
@@ -117,8 +117,8 @@ function TicketCard({ task }) {
               >
                 <Tooltip title={task.name}>
                   <div className="font-bold">
-                    {task.name.length > 50
-                      ? task.name.slice(0, 50) + "..."
+                    {task.name.length > 30 && window.innerWidth < 645
+                      ? task.name.slice(0, 20) + "..."
                       : task.name}
                   </div>
                 </Tooltip>
@@ -136,7 +136,7 @@ function TicketCard({ task }) {
             </div>
 
             {task.dueDate && new Date() > new Date(task.dueDate) && (
-              <div className="px-1 cursor-default bg-red-600 text-[10px] text-white rounded-md ml-4 shadow-lg">
+              <div className="px-1 cursor-default bg-red-600 text-[10px] text-white rounded-md ml-4 shadow-lg  hidden lg:flex">
                 overdue
               </div>
             )}
@@ -169,7 +169,7 @@ function TicketCard({ task }) {
                     <DeleteIcon className="!h-4 !w-4 mr-2" /> Delete
                   </MenuItem>
                 </Menu>
-                <div className="ml-2 cursor-grab">
+                <div className="ml-2 cursor-grab hidden lg:flex">
                   <DragIndicatorIcon />
                 </div>
               </div>
