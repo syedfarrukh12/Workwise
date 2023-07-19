@@ -66,8 +66,8 @@ const Dashboard = () => {
     axios
       .get(`${API_URL}/tasks/${selectedProject}`)
       .then((response) => {
-        console.log(response)
-        dispatch(setReduxTasks(response.data))
+        console.log(response);
+        dispatch(setReduxTasks(response.data));
         setLoading(false);
       })
       .catch((error) => {
@@ -76,17 +76,17 @@ const Dashboard = () => {
     //eslint-disable-next-line
   }, [selectedProject]);
 
-  useEffect(()=>{
-    console.log(allTasks)
-    setTasks(allTasks)
-  },[allTasks])
+  useEffect(() => {
+    console.log(allTasks);
+    setTasks(allTasks);
+  }, [allTasks]);
 
   const filteredTasks = tasks?.filter((task) => {
     return task.name?.toLowerCase().includes(query.toLocaleLowerCase());
   });
 
   return (
-    <>
+    <div className="h-screen overflow-auto">
       <div className="w-full">
         <MobileNavbar />
       </div>
@@ -123,16 +123,16 @@ const Dashboard = () => {
             />
           </div>
 
-          {showBoardView ? (
-            <div>
+          <div className="mt-16">
+            {showBoardView ? (
               <BoardView tasks={filteredTasks} loading={loading} />
-            </div>
-          ) : (
-            <CustomAccordion tasks={filteredTasks} loading={loading} />
-          )}
+            ) : (
+              <CustomAccordion tasks={filteredTasks} loading={loading} />
+            )}
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
