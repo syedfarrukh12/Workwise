@@ -67,6 +67,7 @@ function BoardList({ status, tasks, loading }) {
         );
         dispatch(setShowTicket({ value: false, type: "" }));
         dispatch(addTask(response.data));
+        
       })
       .catch((error) => {
         dispatch(setOpenAlert({ value: true, message: error, type: "error" }));

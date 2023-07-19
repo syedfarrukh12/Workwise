@@ -13,6 +13,7 @@ import {
   addTask,
   setOpenAlert,
   setShowTicket,
+  updateSelectedTask,
 } from "../../redux/nonPersistant";
 import axios from "axios";
 import { API_URL } from "../Common/apiConfig";
@@ -21,7 +22,6 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import project from "../../redux/project";
 
 function TicketModal() {
   const dispatch = useDispatch();
@@ -56,7 +56,7 @@ function TicketModal() {
           priority: "",
           project: currentProject._id,
           dueDate: "",
-          assignee: [currentUser.id],
+          assignee: [],
           createdAt: Date.now(),
           createdBy: currentUser.id,
         }
@@ -71,8 +71,6 @@ function TicketModal() {
   };
 
   const handleSubmit = () => {
-    console.log(ticket);
-    console.log(selectedProject);
     if (!ticket.project) {
       return dispatch(
         setOpenAlert({
@@ -106,7 +104,7 @@ function TicketModal() {
             })
           );
           dispatch(setShowTicket({ value: false, type: "" }));
-          dispatch(addTask(response.data));
+          dispatch(updateSelectedTask(response.data));
         })
         .catch((error) => {
           dispatch(
@@ -124,6 +122,7 @@ function TicketModal() {
               type: "success",
             })
           );
+          console.log(response)
           dispatch(setShowTicket({ value: false, type: "" }));
           dispatch(addTask(response.data));
         })

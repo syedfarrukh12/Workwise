@@ -49,6 +49,6 @@ export const checkEmail = (email) => {
 };
 
 export const getInitials = (name) => {
-  const words = name.split(/(?=[A-Z])/);
-  return words.map((word) => word[0]).join("");
+  const words = name?.split(/(?=[A-Z])/);
+  return words?.map((word) => word[0]).join("");
 };

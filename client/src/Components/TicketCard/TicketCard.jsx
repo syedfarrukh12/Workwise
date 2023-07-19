@@ -1,4 +1,4 @@
-import { IconButton, Menu, MenuItem } from "@mui/material";
+import { IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
 import React, { useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
@@ -88,17 +88,19 @@ function TicketCard({ task }) {
         >
           <div className="flex items-center w-full">
             <div className="space-x-2 flex items-center cursor-pointer ">
-              <FlagIcon
-                className={`${
-                  task.priority === TaskPriority.Low
-                    ? "text-[#388E3C]"
-                    : task.priority === TaskPriority.Medium
-                    ? "text-[#FFEB3B]"
-                    : task.priority === TaskPriority.High
-                    ? "text-[#FF9800]"
-                    : "text-[#F44336]"
-                }`}
-              />
+              <Tooltip title={task.priority}>
+                <FlagIcon
+                  className={`${
+                    task.priority === TaskPriority.Low
+                      ? "text-[#388E3C]"
+                      : task.priority === TaskPriority.Medium
+                      ? "text-[#FFEB3B]"
+                      : task.priority === TaskPriority.High
+                      ? "text-[#FF9800]"
+                      : "text-[#F44336]"
+                  }`}
+                />
+              </Tooltip>
               <div className="flex items-center h-5">
                 {visible ? (
                   <VisibilityIcon onClick={handleUpdateVisibility} />
@@ -113,14 +115,31 @@ function TicketCard({ task }) {
                   dispatch(setSelectedTask(task));
                 }}
               >
-                <div className="font-bold">{task.name}</div>
+                <Tooltip title={task.name}>
+                  <div className="font-bold">
+                    {task.name.length > 50
+                      ? task.name.slice(0, 50) + "..."
+                      : task.name}
+                  </div>
+                </Tooltip>
+
                 {task.dueDate && (
-                  <div className={`text-xs ${theme === 'dark' ? 'text-white/50' : 'text-black/50'}`}>
+                  <div
+                    className={`text-xs ${
+                      theme === "dark" ? "text-white/50" : "text-black/50"
+                    }`}
+                  >
                     Due Date: {formatDate(task.dueDate)}
                   </div>
                 )}
               </div>
             </div>
+
+            {task.dueDate && new Date() > new Date(task.dueDate) && (
+              <div className="px-1 cursor-default bg-red-600 text-[10px] text-white rounded-md ml-4 shadow-lg">
+                overdue
+              </div>
+            )}
 
             <div className="ml-auto">
               <div className="flex items-center">

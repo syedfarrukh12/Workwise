@@ -16,6 +16,7 @@ import CustomDialog from "../../Components/Common/CustomDialog";
 import CustomNavigation from "../../Components/Common/CustomNavigation";
 import BoardView from "../../Components/BoardView/BoardView";
 import TicketDetails from "../../Components/TicketDetails/TicketDetails";
+import { setReduxTasks } from "../../redux/nonPersistant";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -65,18 +66,25 @@ const Dashboard = () => {
     axios
       .get(`${API_URL}/tasks/${selectedProject}`)
       .then((response) => {
-        setTasks(response.data);
+        console.log(response)
+        dispatch(setReduxTasks(response.data))
         setLoading(false);
       })
       .catch((error) => {
         console.log(error);
       });
     //eslint-disable-next-line
-  }, [selectedProject, allTasks]);
+  }, [selectedProject]);
 
-  const filteredTasks = tasks.filter((task) => {
-    return task.name.toLowerCase().includes(query.toLocaleLowerCase());
+  useEffect(()=>{
+    console.log(allTasks)
+    setTasks(allTasks)
+  },[allTasks])
+
+  const filteredTasks = tasks?.filter((task) => {
+    return task.name?.toLowerCase().includes(query.toLocaleLowerCase());
   });
+
   return (
     <>
       <div className="w-full">
