@@ -87,8 +87,8 @@ const Dashboard = () => {
 
   return (
     <div className="h-screen overflow-auto">
-      <div className="w-full">
-        <MobileNavbar />
+      <div className="w-full mt-14">
+        <MobileNavbar setShowProjectDialog={setShowProjectDialog} />
       </div>
       <CustomSnackbar
         value={snackbar.value}
@@ -123,7 +123,7 @@ const Dashboard = () => {
             />
           </div>
 
-          <div className="mt-16">
+          <div className="mt-3">
             {showBoardView ? (
               <BoardView tasks={filteredTasks} loading={loading} />
             ) : (

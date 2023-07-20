@@ -131,13 +131,13 @@ function CreateProject() {
         <div className="p-3 space-x-3 justify-end flex">
           <button
             onClick={handleClose}
-            className="bg-red-500 hover:bg-red-700 p-2 rounded-lg text-white"
+            className="bg-red-500 hover:bg-red-700 p-2 rounded-full text-white"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
-            className="bg-sky-600 hover:bg-sky-800 p-2 rounded-lg text-white"
+            className="bg-sky-600 hover:bg-sky-800 p-2 rounded-full text-white"
           >
             Create Project
           </button>

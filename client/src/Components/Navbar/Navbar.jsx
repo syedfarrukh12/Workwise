@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { resetStore } from "../../redux/store";
 import LogoutIcon from "@mui/icons-material/Logout";
 
@@ -16,6 +16,7 @@ function Navbar({ setIsLoggedIn }) {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [currentTheme, setCurrentTheme] = useState(theme);
+  const currentUser = useSelector((state) => state.user.value);
 
   const handleThemeToggle = () => {
     const newTheme = currentTheme === "light" ? "dark" : "light";
@@ -109,7 +110,11 @@ function Navbar({ setIsLoggedIn }) {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>Edit Project</MenuItem>
+                {(currentUser.role === "manager" ||
+                  currentUser.role === "admin") && (
+                  <MenuItem onClick={handleClose}>Edit Project</MenuItem>
+                )}
+
                 <div className="items-center flex sm:hidden">
                   <MenuItem>
                     <LightModeIcon />
