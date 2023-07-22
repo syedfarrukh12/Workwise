@@ -8,6 +8,7 @@ export const nonPersistantSlice = createSlice({
     showTicket: { value: false, type: "" },
     tasks: [],
     selectedTask: {},
+    showTask: false,
   },
   reducers: {
     setOpenAlert: (state, action) => {
@@ -19,8 +20,23 @@ export const nonPersistantSlice = createSlice({
     setShowTicket: (state, action) => {
       state.showTicket = action.payload;
     },
+    setReduxTasks: (state, action) => {
+      return {
+        ...state,
+        tasks: [...state.tasks, ...action.payload],
+      };
+    },
     addTask: (state, action) => {
-      state.tasks.push(action.payload);
+      return {
+        ...state,
+        tasks: [...state.tasks, action.payload],
+      };
+    },
+    updateSelectedTask: (state, action) => {
+      const updatedTask = action.payload;
+      state.tasks = state.tasks.map((task) =>
+        task._id === updatedTask._id ? updatedTask : task
+      );
     },
     setSelectedTask: (state, action) => {
       state.selectedTask = action.payload;
@@ -34,6 +50,9 @@ export const nonPersistantSlice = createSlice({
         tasks: updatedTasks,
       };
     },
+    setShowTask: (state, action) => {
+      state.showTask = action.payload;
+    },
   },
 });
 
@@ -44,6 +63,9 @@ export const {
   addTask,
   setSelectedTask,
   deleteSelectedTask,
+  setShowTask,
+  setReduxTasks,
+  updateSelectedTask,
 } = nonPersistantSlice.actions;
 
 export default nonPersistantSlice.reducer;

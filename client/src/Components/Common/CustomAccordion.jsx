@@ -109,20 +109,28 @@ function CustomAccordion({ tasks, loading }) {
             expandIcon={<ExpandCircleDownOutlinedIcon />}
             aria-controls={`${status}-content`}
             id={`${status}-header`}
-            className="flex items-center space-x-3 justify-start"
           >
-            <Typography>{camelCaseToSentenceCase(status)}</Typography>
-            {hover.value && hover.status === status && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowAddTicket({ value: true, status: status });
-                }}
-                className="p-2 ml-5 rounded-md hover:bg-[#a4b7c6] hover:text-[#000] w-5 h-5 flex items-center justify-center cursor-pointer"
+            <div className="flex items-center space-x-3">
+              <Typography>{camelCaseToSentenceCase(status)}</Typography>
+              <div
+                className={`rounded-full px-2 shadow-md ${
+                  theme === "dark" ? "bg-[#27374D]" : "bg-[#DDE6ED]"
+                }`}
               >
-                <AddIcon className="!w-5 !h-5" />
-              </button>
-            )}
+                {groupedTasks[status]?.length}
+              </div>
+              {hover.value && hover.status === status && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowAddTicket({ value: true, status: status });
+                  }}
+                  className="p-2 ml-5 rounded-md hover:bg-[#a4b7c6] hover:text-[#000] w-5 h-5 flex items-center justify-center cursor-pointer"
+                >
+                  <AddIcon className="!w-5 !h-5" />
+                </button>
+              )}
+            </div>
           </AccordionSummary>
           <AccordionDetails>
             {loading ? (

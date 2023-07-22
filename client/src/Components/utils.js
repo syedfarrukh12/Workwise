@@ -40,10 +40,15 @@ export function formatDate(isoDate) {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   const year = date.getFullYear();
-  return `${month}/${day}/${year}`;
+  return `${day}/${month}/${year}`;
 }
 
 export const checkEmail = (email) => {
   const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   return emailRegex.test(email);
+};
+
+export const getInitials = (name) => {
+  const words = name?.split(/(?=[A-Z])/);
+  return words?.map((word) => word[0]).join("");
 };

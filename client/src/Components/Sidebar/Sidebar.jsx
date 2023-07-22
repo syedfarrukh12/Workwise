@@ -7,7 +7,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import HelpIcon from "@mui/icons-material/Help";
 import { setShowInvite, setShowTicket } from "../../redux/nonPersistant";
 
-function Sidebar({ setShowProjectDialog, showProjectDialog }) {
+function Sidebar({ setShowProjectDialog }) {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.value);
   const theme = localStorage.getItem("theme");
@@ -29,7 +29,7 @@ function Sidebar({ setShowProjectDialog, showProjectDialog }) {
         >
           {selectedProject.name}
         </div>
-        {currentUser.role === "manager" && (
+        {(currentUser.role === "manager" || currentUser.role === "admin") && (
           <button
             onClick={() => {
               dispatch(setShowInvite(false));

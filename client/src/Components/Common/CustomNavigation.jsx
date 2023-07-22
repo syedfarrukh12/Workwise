@@ -61,7 +61,7 @@ function CustomNavigation({ setQuery, query }) {
             value={query}
             name="name"
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search"
+            placeholder="Search by title"
             InputProps={{
               endAdornment: <SearchIcon />,
             }}

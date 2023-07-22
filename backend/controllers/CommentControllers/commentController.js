@@ -3,7 +3,7 @@ import Comment from "../../models/commentSchema.js";
 export const getComments = (req, res, next) => {
   const taskId = req.params.taskId;
 
-  Comment.find({ task: taskId })
+  Comment.find({ task: taskId }).populate('author', 'name')
     .then((comments) => {
       if (!comments) {
         res.status(404).send("No comments found");

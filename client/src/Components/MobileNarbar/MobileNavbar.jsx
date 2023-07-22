@@ -1,23 +1,16 @@
 import React from "react";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedProject, setShowCreateProject } from "../../redux/project";
+import { setShowCreateProject } from "../../redux/project";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import HelpIcon from "@mui/icons-material/Help";
 import { setShowInvite, setShowTicket } from "../../redux/nonPersistant";
 
-function MobileNavbar() {
+function MobileNavbar({ setShowProjectDialog }) {
   const dispatch = useDispatch();
-  const projects = useSelector((state) => state.projects.projects);
   const currentUser = useSelector((state) => state.user.value);
   const theme = localStorage.getItem("theme");
-
-  const handleProjectChange = (event) => {
-    const selectedProject = event.target.value;
-    dispatch(setSelectedProject(selectedProject));
-  };
 
   const selectedProject = useSelector(
     (state) => state.projects.selectedProject
@@ -29,30 +22,18 @@ function MobileNavbar() {
         theme === "dark" ? "bg-[#20324c]" : "bg-[#eaf2f8]"
       } p-3 flex lg:hidden`}
     >
-      <div className="space-x-3 justify-start flex">
-        <FormControl>
-          <InputLabel id="demo-simple-select-label">Projects</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={selectedProject}
-            label="Project"
-            size="small"
-            onChange={handleProjectChange}
-          >
-            {projects &&
-              projects.map((project) => (
-                <MenuItem key={project._id} value={project}>
-                  {project.name}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
+      <div className="space-x-3 justify-start flex items-center">
+        <div
+          className="text-base text-center border p-3 rounded-lg cursor-pointer font-semibold"
+          onClick={() => setShowProjectDialog(true)}
+        >
+          {selectedProject.name}
+        </div>
         {currentUser.role === "manager" && (
           <button
             onClick={() => {
               dispatch(setShowInvite(false));
-              dispatch(setShowTicket({value:false, type: ''}));
+              dispatch(setShowTicket({ value: false, type: "" }));
               dispatch(setShowCreateProject(true));
             }}
             className={`cursor-pointer py-2 px-4 justify-center flex items-center space-x-1 rounded-full ${
@@ -69,7 +50,7 @@ function MobileNavbar() {
         <button
           onClick={() => {
             dispatch(setShowInvite(false));
-            dispatch(setShowTicket({value:true, type: ''}));
+            dispatch(setShowTicket({ value: true, type: "" }));
             dispatch(setShowCreateProject(false));
           }}
           className={`cursor-pointer py-2 px-4 justify-center items-center flex space-x-2 rounded-full ${
@@ -98,7 +79,7 @@ function MobileNavbar() {
           onClick={() => {
             dispatch(setShowCreateProject(false));
             dispatch(setShowInvite(true));
-            dispatch(setShowTicket({value:true, type: ''}));
+            dispatch(setShowTicket({ value: false, type: "" }));
           }}
           className={`cursor-pointer py-2 px-4 justify-center items-center flex space-x-2 rounded-full ${
             theme === "dark"

@@ -21,10 +21,10 @@ const taskSchema = new Schema({
   dueDate: {
     type: Date,
   },
-  assignee: {
+  assignee: [{
     type: Schema.Types.ObjectId,
     ref: "User",
-  },
+  }],
   createdAt: {
     type: Date,
     default: Date.now(),

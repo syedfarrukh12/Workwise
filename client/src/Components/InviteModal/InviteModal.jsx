@@ -1,4 +1,4 @@
-import { Backdrop, TextField } from "@mui/material";
+import { Backdrop, Divider, TextField } from "@mui/material";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
@@ -42,21 +42,22 @@ function InviteModal() {
         <div
           onClick={(e) => e.stopPropagation()}
           className={`${
-            theme === "dark" ? "bg-[#27374D]" : "bg-white"
+            theme === "dark" ? "bg-[#27374D]" : "bg-[#DDE6ED]"
           } md:rounded-2xl lg:w-[30%] md:w-[50%]  w-full shadow-2xl`}
         >
-          <div className="flex justify-between p-3 border-b">
+          <div className="flex justify-between p-3">
             <span>Invite People</span>
             <button
               onClick={() => {
                 dispatch(setShowInvite(false));
               }}
-              className="bg-none"
+              className="cursor-pointer hover:bg-black/10 w-fit rounded-full ml-auto"
             >
-              <CloseIcon />
+              <CloseIcon className="!w-5 !h-5"/>
             </button>
           </div>
-          <div className="p-5 border-b">
+          <Divider />
+          <div className="p-5">
             <span>Email</span>
             <TextField
               id="outlined-basic"
@@ -71,18 +72,19 @@ function InviteModal() {
               }}
             />
           </div>
+          <Divider />
           <div className="p-3 space-x-3 justify-end flex">
             <button
               onClick={() => {
                 dispatch(setShowInvite(false));
               }}
-              className="bg-red-500 hover:bg-red-700 p-2 rounded-lg text-white"
+              className="bg-red-500 hover:bg-red-700 py-2 px-3 rounded-full text-white"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
-              className="bg-sky-600 hover:bg-sky-800 p-2 rounded-lg text-white"
+              className="bg-sky-600 hover:bg-sky-800 py-2 px-3 rounded-full text-white"
             >
               Send Invite
             </button>

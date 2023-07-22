@@ -37,9 +37,7 @@ function App() {
             </>
           )}
           <div
-            className={`${
-              isLoggedIn ? "mt-14" : "mt-0"
-            } text-sm ${theme === "dark" ? "bg-[#27374D]" : "bg-[#DDE6ED]"}`}
+            className={` text-sm ${theme === "dark" ? "bg-[#27374D]" : "bg-[#DDE6ED]"}`}
           >
             <Suspense fallback={<LinearProgress />}>
               <AppRoutes setIsLoggedIn={setIsLoggedIn} />

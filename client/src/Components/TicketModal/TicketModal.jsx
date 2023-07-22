@@ -1,5 +1,6 @@
 import {
   Backdrop,
+  Divider,
   FormControl,
   MenuItem,
   Select,
@@ -12,6 +13,7 @@ import {
   addTask,
   setOpenAlert,
   setShowTicket,
+  updateSelectedTask,
 } from "../../redux/nonPersistant";
 import axios from "axios";
 import { API_URL } from "../Common/apiConfig";
@@ -54,7 +56,7 @@ function TicketModal() {
           priority: "",
           project: currentProject._id,
           dueDate: "",
-          assignee: currentUser.id,
+          assignee: [],
           createdAt: Date.now(),
           createdBy: currentUser.id,
         }
@@ -69,8 +71,6 @@ function TicketModal() {
   };
 
   const handleSubmit = () => {
-    console.log(ticket);
-    console.log(selectedProject)
     if (!ticket.project) {
       return dispatch(
         setOpenAlert({
@@ -80,10 +80,7 @@ function TicketModal() {
         })
       );
     }
-    if (
-      !ticket.name ||
-      !ticket.priority
-    ) {
+    if (!ticket.name || !ticket.priority) {
       return dispatch(
         setOpenAlert({
           value: true,
@@ -107,7 +104,7 @@ function TicketModal() {
             })
           );
           dispatch(setShowTicket({ value: false, type: "" }));
-          dispatch(addTask(response.data));
+          dispatch(updateSelectedTask(response.data));
         })
         .catch((error) => {
           dispatch(
@@ -125,6 +122,7 @@ function TicketModal() {
               type: "success",
             })
           );
+          console.log(response)
           dispatch(setShowTicket({ value: false, type: "" }));
           dispatch(addTask(response.data));
         })
@@ -148,10 +146,10 @@ function TicketModal() {
             e.stopPropagation();
           }}
           className={`${
-            theme === "dark" ? "bg-[#27374D]" : "bg-white"
+            theme === "dark" ? "bg-[#27374D]" : "bg-[#DDE6ED]"
           } md:rounded-2xl lg:w-[40%] md:w-[70%] w-full shadow-2xl`}
         >
-          <div className="flex justify-between p-3 border-b">
+          <div className="flex justify-between p-3">
             <span>
               {editCondition ? "Edit Ticket" : "Create Ticket"} for{" "}
               {selectedProject.name}
@@ -160,12 +158,13 @@ function TicketModal() {
               onClick={() => {
                 dispatch(setShowTicket({ value: false, type: "" }));
               }}
-              className="bg-none"
+              className="cursor-pointer hover:bg-black/10 w-fit rounded-full ml-auto"
             >
-              <CloseIcon />
+              <CloseIcon className="!w-5 !h-5" />
             </button>
           </div>
-          <div className="flex p-5 flex-col space-y-3 border-b overflow-auto max-h-[450px] lg:max-h-[500px]">
+          <Divider />
+          <div className="flex p-5 flex-col space-y-3 overflow-auto max-h-[450px] lg:max-h-[500px]">
             <span>Ticket Title</span>
             <TextField
               id="outlined-basic"
@@ -235,18 +234,22 @@ function TicketModal() {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DatePicker"]}>
                   <DatePicker
-                    value={ticket.dueDate}
-                    name="dueDate"
-                    onChange={(date) =>
-                      handleChange({ target: { value: date } })
-                    }
                     className="w-full"
+                    size="small"
+                    value={ticket.dueDate}
+                    onChange={(newValue) =>
+                      setTicket((prev) => ({
+                        ...prev,
+                        dueDate: newValue,
+                      }))
+                    }
                   />
                 </DemoContainer>
               </LocalizationProvider>
             </div>
 
             <span>Assignee</span>
+            {console.log(selectedProject)}
             <FormControl>
               <Select
                 labelId="demo-simple-select-label"
@@ -256,12 +259,15 @@ function TicketModal() {
                 size="small"
                 name="assignee"
               >
-                <MenuItem value={currentUser.id}>Ali</MenuItem>
-                <MenuItem value={currentUser.id}>Ahmad</MenuItem>
-                <MenuItem value={currentUser.id}>Murtaza</MenuItem>
+                {selectedProject.users.map((assignee) => (
+                  <MenuItem key={assignee._id} value={assignee._id}>
+                    {assignee.name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </div>
+          <Divider />
           <div className="p-3 space-x-3 justify-end flex">
             <button
               onClick={() => {
