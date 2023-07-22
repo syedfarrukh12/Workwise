@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Components/Common/apiConfig";
-
 import { useDispatch, useSelector } from "react-redux";
-import { addProjects } from "../../redux/project";
-import CreateProject from "../../Components/CreateProject/CreateProject";
 import InviteModal from "../../Components/InviteModal/InviteModal";
 import CustomSnackbar from "../../Components/Common/CustomSnackbar";
 import TicketModal from "../../Components/TicketModal/TicketModal";
@@ -16,16 +13,17 @@ import CustomDialog from "../../Components/Common/CustomDialog";
 import CustomNavigation from "../../Components/Common/CustomNavigation";
 import BoardView from "../../Components/BoardView/BoardView";
 import TicketDetails from "../../Components/TicketDetails/TicketDetails";
-import { setReduxTasks } from "../../redux/nonPersistant";
+import { setProjects, setReduxTasks } from "../../redux/nonPersistant";
+import EditProject from "../../Components/ProjectComponents/CreateUpdateProject";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.value);
   const showCreateModal = useSelector(
-    (state) => state.projects.showCreateProject
+    (state) => state.nonPersistant.showCreateProject
   );
-  const selectedProject = useSelector(
+  const selectedProjectId = useSelector(
     (state) => state.projects.selectedProject?._id
   );
   const showInviteModal = useSelector(
@@ -34,11 +32,11 @@ const Dashboard = () => {
   const showTicketModal = useSelector(
     (state) => state.nonPersistant.showTicket
   );
-  const projects = useSelector((state) => state.projects.projects);
+
+  const projects = useSelector((state) => state.nonPersistant.projects);
   const snackbar = useSelector((state) => state.nonPersistant.openAlert);
   const allTasks = useSelector((state) => state.nonPersistant.tasks);
   const boardView = useSelector((state) => state.projects.showBoardView);
-  const [tasks, setTasks] = useState([]);
   const [showProjectDialog, setShowProjectDialog] = useState(false);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
@@ -49,11 +47,11 @@ const Dashboard = () => {
     if (!localStorage.getItem("apiKey")) {
       navigate("/login");
     }
-    if (!selectedProject) setShowProjectDialog(true);
+    if (!selectedProjectId) setShowProjectDialog(true);
     axios
       .get(`${API_URL}/projects/${user.id}`)
       .then((response) => {
-        dispatch(addProjects(response.data));
+        dispatch(setProjects(response.data));
       })
       .catch((error) => {
         console.log(error);
@@ -64,9 +62,8 @@ const Dashboard = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`${API_URL}/tasks/${selectedProject}`)
+      .get(`${API_URL}/tasks/${selectedProjectId}`)
       .then((response) => {
-        console.log(response);
         dispatch(setReduxTasks(response.data));
         setLoading(false);
       })
@@ -74,14 +71,9 @@ const Dashboard = () => {
         console.log(error);
       });
     //eslint-disable-next-line
-  }, [selectedProject]);
+  }, [selectedProjectId]);
 
-  useEffect(() => {
-    console.log(allTasks);
-    setTasks(allTasks);
-  }, [allTasks]);
-
-  const filteredTasks = tasks?.filter((task) => {
+  const filteredTasks = allTasks?.filter((task) => {
     return task.name?.toLowerCase().includes(query.toLocaleLowerCase());
   });
 
@@ -104,11 +96,12 @@ const Dashboard = () => {
         <div className="sticky top-14 z-10">
           <CustomNavigation setQuery={setQuery} query={query} />
         </div>
-        {showCreateModal && (
+        {showCreateModal.value && (
           <div>
-            <CreateProject />
+            <EditProject />
           </div>
         )}
+
         <div className="lg:mt-0">
           {showInviteModal && <InviteModal />}
           {showTicketModal.value && <TicketModal />}

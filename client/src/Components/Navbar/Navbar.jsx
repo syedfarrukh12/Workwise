@@ -4,13 +4,14 @@ import Switch from "@mui/material/Switch";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { NavLink, useNavigate } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch, useSelector } from "react-redux";
 import { resetStore } from "../../redux/store";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { setShowCreateProject } from "../../redux/nonPersistant";
+import { getInitials } from "../utils";
+import { Divider } from "@mui/material";
 
 function Navbar({ setIsLoggedIn }) {
   const navigate = useNavigate();
@@ -27,9 +28,7 @@ function Navbar({ setIsLoggedIn }) {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -84,22 +83,14 @@ function Navbar({ setIsLoggedIn }) {
               <span className="lg:flex hidden ml-2">Logout</span>
             </button>
             <div>
-              <IconButton
-                aria-label="more"
-                id="long-button"
-                aria-controls={open ? "long-menu" : undefined}
-                aria-expanded={open ? "true" : undefined}
-                aria-haspopup="true"
-                onClick={handleClick}
+              <span
+                onClick={(event) => {
+                  setAnchorEl(event.currentTarget);
+                }}
+                className={`p-2 rounded-full cursor-pointer bg-[#007FFF]/60`}
               >
-                <MoreVertIcon
-                  className={
-                    localStorage.getItem("theme") === "dark"
-                      ? "text-white"
-                      : "text-black"
-                  }
-                />
-              </IconButton>
+                {getInitials(currentUser.name)}
+              </span>
               <Menu
                 id="long-menu"
                 MenuListProps={{
@@ -109,10 +100,21 @@ function Navbar({ setIsLoggedIn }) {
                 open={open}
                 onClose={handleClose}
               >
+                <MenuItem>{currentUser.name}</MenuItem>
+                <Divider />
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 {(currentUser.role === "manager" ||
                   currentUser.role === "admin") && (
-                  <MenuItem onClick={handleClose}>Edit Project</MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      dispatch(
+                        setShowCreateProject({ value: true, type: "edit" })
+                      );
+                      handleClose();
+                    }}
+                  >
+                    Edit Project
+                  </MenuItem>
                 )}
 
                 <div className="items-center flex sm:hidden">

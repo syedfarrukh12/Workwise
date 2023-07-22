@@ -5,6 +5,7 @@ import {
   camelCaseToSentenceCase,
   formatDate,
   getInitials,
+  lightColors,
 } from "../utils";
 import { setShowTask, setShowTicket } from "../../redux/nonPersistant";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -17,16 +18,26 @@ function TicketInfo({ selectedTask }) {
   return (
     <>
       <div className="flex flex-col w-full h-72 pr-4" name="main">
-        {selectedTask.assignee.length > 0 &&
-          selectedTask.assignee.map((item) => (
-            <div className="w-fit">
-              <Tooltip title={item.name}>
-                <span className=" p-2 rounded-full bg-red-400 cursor-default">
-                  {getInitials(item.name)}
-                </span>
-              </Tooltip>
-            </div>
-          ))}
+        <div className="flex">
+          {selectedTask.assignee.length > 0 &&
+            selectedTask.assignee.map((item, index) => (
+              <div className="w-fit" key={index}>
+                <Tooltip title={item.name}>
+                  <span
+                    style={{
+                      borderRadius: "500px",
+                      backgroundColor: lightColors[index],
+                    }}
+                    className={`p-2 rounded-ful text-gray-800 cursor-default ${
+                      index > 0 ? "-ml-2" : ""
+                    }`}
+                  >
+                    {getInitials(item.name)}
+                  </span>
+                </Tooltip>
+              </div>
+            ))}
+        </div>
 
         {selectedTask.dueDate && (
           <div className="mt-3 ">

@@ -3,12 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 export const nonPersistantSlice = createSlice({
   name: "nonPersistant",
   initialState: {
-    openAlert: { value: false, message: "", type: "" },
+    openAlert: { value: false, message: "", type: "error" },
     showInvite: false,
     showTicket: { value: false, type: "" },
     tasks: [],
     selectedTask: {},
     showTask: false,
+    showCreateProject: { value: false, type: "" },
+    projects: [],
   },
   reducers: {
     setOpenAlert: (state, action) => {
@@ -53,6 +55,21 @@ export const nonPersistantSlice = createSlice({
     setShowTask: (state, action) => {
       state.showTask = action.payload;
     },
+    setShowCreateProject: (state, action) => {
+      state.showCreateProject = action.payload;
+    },
+    addProjects: (state, action) => {
+      return {
+        ...state,
+        projects: [...state.projects, action.payload],
+      };
+    },
+    setProjects: (state, action) => {
+      return {
+        ...state,
+        projects: [...state.projects, ...action.payload],
+      };
+    },
   },
 });
 
@@ -66,6 +83,9 @@ export const {
   setShowTask,
   setReduxTasks,
   updateSelectedTask,
+  setShowCreateProject,
+  addProjects,
+  setProjects,
 } = nonPersistantSlice.actions;
 
 export default nonPersistantSlice.reducer;
