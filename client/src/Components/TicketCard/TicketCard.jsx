@@ -6,7 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import FlagIcon from "@mui/icons-material/Flag";
-import { TaskPriority, formatDate } from "../utils";
+import { TaskPriority, formatDate, getInitials, lightColors } from "../utils";
 import axios from "axios";
 import { API_URL } from "../Common/apiConfig";
 import { useDispatch, useSelector } from "react-redux";
@@ -94,10 +94,10 @@ function TicketCard({ task }) {
                     task.priority === TaskPriority.Low
                       ? "text-[#388E3C]"
                       : task.priority === TaskPriority.Medium
-                      ? "text-[#FFEB3B]"
+                      ? "text-[#ffcc00]"
                       : task.priority === TaskPriority.High
-                      ? "text-[#FF9800]"
-                      : "text-[#F44336]"
+                      ? "text-[#ff8c00]"
+                      : "text-[#FF4500]"
                   }`}
                 />
               </Tooltip>
@@ -140,6 +140,26 @@ function TicketCard({ task }) {
                 overdue
               </div>
             )}
+            <div className="flex ml-10">
+              {task.assignee.length > 0 &&
+                task.assignee.map((item, index) => (
+                  <div className="w-fit" key={index}>
+                    <Tooltip title={item.name}>
+                      <span
+                        style={{
+                          borderRadius: "500px",
+                          backgroundColor: lightColors[index],
+                        }}
+                        className={`p-2 rounded-ful text-gray-800 cursor-default ${
+                          index > 0 ? "-ml-2" : ""
+                        }`}
+                      >
+                        {getInitials(item.name)}
+                      </span>
+                    </Tooltip>
+                  </div>
+                ))}
+            </div>
 
             <div className="ml-auto">
               <div className="flex items-center">

@@ -15,7 +15,9 @@ function CommentCard({ comment, handleDelete }) {
         }`}
       >
         <div className="flex justify-between">
-          <div className="font-semibold">{comment.author.name}</div>
+          <div className="font-semibold">
+            {comment.author.name || currentUser.name}
+          </div>
           {comment.author._id === currentUser.id && (
             <div
               className="hover:bg-white/40 cursor-pointer rounded-md px-1"
@@ -27,7 +29,7 @@ function CommentCard({ comment, handleDelete }) {
         </div>
         <div>{comment.text}</div>
         <div className="text-[10px] ml-auto">
-          {formatDate(comment.createdAt)}
+          {formatDate(comment.createdAt) || formatDate(new Date())}
         </div>
       </div>
     </>

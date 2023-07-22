@@ -7,8 +7,7 @@ export const getProjects = async (req, res, next) => {
       createdBy: userId,
     }).populate("users", "name");
     const projectsPartOfUser = await Project.find({ users: userId }).populate(
-      "users",
-      "name"
+      "users"
     );
     const allProjects = projectsCreatedByUser.concat(projectsPartOfUser);
     const uniqueProjectsSet = new Set();

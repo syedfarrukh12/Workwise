@@ -175,14 +175,14 @@ function TicketModal() {
               variant="outlined"
               onChange={handleChange}
               name="name"
-              placeholder="Name for project"
+              placeholder="Title for ticket"
               value={ticket.name}
             />
             <span>Ticket Description</span>
             <TextField
               id="outlined-basic"
               className="w-full"
-              placeholder="Description for project"
+              placeholder="Description for Ticket"
               size="small"
               variant="outlined"
               multiline
@@ -237,7 +237,7 @@ function TicketModal() {
                 <DemoContainer components={["DatePicker"]}>
                   <DatePicker
                     className="w-full"
-                    size="small"
+                    disablePast
                     value={dayjs(ticket.dueDate)}
                     onChange={(newValue) =>
                       setTicket((prev) => ({

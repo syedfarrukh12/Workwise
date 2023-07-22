@@ -155,6 +155,7 @@ function EditProject() {
                         <DatePicker
                           className="w-full"
                           size="small"
+                          disablePast
                           value={dayjs(project.startDate)}
                           onChange={(newValue) =>
                             setProject((prev) => ({
@@ -173,6 +174,7 @@ function EditProject() {
                         <DatePicker
                           className="w-full"
                           size="small"
+                          disablePast
                           value={dayjs(project.endDate)}
                           onChange={(newValue) =>
                             setProject((prev) => ({

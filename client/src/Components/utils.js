@@ -66,7 +66,6 @@ export const lightColors = [
   "#FFC300", // Vivid yellow
   "#FFC0CB", // Pink
   "#E56E94", // Light pink
-  "#FF5733", // Reddish-orange (repeated)
   "#007FFF", // Azure blue
   "#7FFF00", // Chartreuse green
   "#00FF7F", // Spring green
