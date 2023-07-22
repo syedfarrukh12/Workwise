@@ -3,7 +3,8 @@ import Comment from "../../models/commentSchema.js";
 export const getComments = (req, res, next) => {
   const taskId = req.params.taskId;
 
-  Comment.find({ task: taskId }).populate('author', 'name')
+  Comment.find({ task: taskId })
+    .populate("author", "name")
     .then((comments) => {
       if (!comments) {
         res.status(404).send("No comments found");
@@ -17,15 +18,10 @@ export const getComments = (req, res, next) => {
 };
 
 export const editComment = (req, res, next) => {
-  const taskId = req.params.taskId;
   const commentId = req.params.commentId;
   const { text } = req.body;
 
-  Comment.findOneAndUpdate(
-    { task: taskId, _id: commentId },
-    { text },
-    { new: true }
-  )
+  Comment.findOneAndUpdate({ _id: commentId }, { text }, { new: true })
     .then((comment) => {
       if (!comment) {
         return res.status(404).send("Comment not found");
@@ -58,12 +54,11 @@ export const createComment = (req, res, next) => {
 };
 
 export const deleteComment = (req, res, next) => {
-  const taskId = req.params.taskId;
   const commentId = req.params.commentId;
 
-  Comment.findOneAndDelete({ _id: commentId, task: taskId })
+  Comment.findOneAndDelete({ _id: commentId })
     .then(() => {
-      res.status(200).send("Comment Successfully deleted");
+      res.status(200).send("Your comment was deleted ");
     })
     .catch((error) => {
       console.log(error);
