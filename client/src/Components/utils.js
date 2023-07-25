@@ -50,5 +50,35 @@ export const checkEmail = (email) => {
 
 export const getInitials = (name) => {
   const words = name?.split(/(?=[A-Z])/);
-  return words?.map((word) => word[0]).join("");
+  return words
+    ?.map((word) => {
+      if (word && word[0] === word[0].toLowerCase()) {
+        return word[0].toUpperCase();
+      } else {
+        return word[0];
+      }
+    })
+    .join("");
 };
+
+export const lightColors = [
+  "#FF5733", // Reddish-orange
+  "#FFC300", // Vivid yellow
+  "#FFC0CB", // Pink
+  "#E56E94", // Light pink
+  "#007FFF", // Azure blue
+  "#7FFF00", // Chartreuse green
+  "#00FF7F", // Spring green
+  "#40E0D0", // Turquoise
+  "#9370DB", // Medium purple
+  "#FF4500", // Orange-red
+  "#00CED1", // Dark turquoise
+  "#FF1493", // Deep pink
+  "#FF69B4", // Hot pink
+  "#48D1CC", // Medium turquoise
+  "#8A2BE2", // Blue-violet
+  "#FFD700", // Gold
+  "#FFA500", // Orange
+  "#008000", // Green
+];
+

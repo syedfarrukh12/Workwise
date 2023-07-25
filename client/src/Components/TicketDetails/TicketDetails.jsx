@@ -1,10 +1,9 @@
-import { Backdrop, Divider } from "@mui/material";
+import { Backdrop, CircularProgress, Divider } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowTask } from "../../redux/nonPersistant";
-import { formatDate } from "../utils";
+import { setOpenAlert, setShowTask } from "../../redux/nonPersistant";
 
 import CommentCard from "./CommentCard";
 import axios from "axios";
@@ -24,6 +23,7 @@ function TicketDetails() {
     EditorState.createEmpty()
   );
   const [addComment, setAddComment] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const getTextFromEditor = () => {
     const contentState = editorState.getCurrentContent();
@@ -34,10 +34,12 @@ function TicketDetails() {
 
   const editor = React.useRef(null);
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`${API_URL}/comments/${selectedTask._id}`)
       .then((res) => {
         setComments(res.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -61,6 +63,18 @@ function TicketDetails() {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleDeleteComment = (comment_id) => {
+    setComments((prev) => prev.filter((comment) => comment._id !== comment_id));
+    axios
+      .delete(`${API_URL}/comment/${comment_id}`)
+      .then((res) => {
+        dispatch(
+          setOpenAlert({ value: true, message: res.data, type: "success" })
+        );
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -91,15 +105,21 @@ function TicketDetails() {
             <Divider orientation="vertical" flexItem />
             <div className={`w-full lg:w-[40%] px-2`} name="comment">
               <div className="font-semibold text-center">Comments</div>
-              <div className="overflow-y-auto overflow-x-hidden max-h-[45vh] lg:max-h-[53vh]">
-                {comments.map((comment) => (
-                  <CommentCard
-                    comment={comment.text}
-                    author={comment.author.name}
-                    createdAt={formatDate(comment.createdAt)}
-                  />
-                ))}
-              </div>
+              {!loading ? (
+                <div className="overflow-y-auto overflow-x-hidden max-h-[45vh] lg:max-h-[53vh]">
+                  {comments.map((comment) => (
+                    <CommentCard
+                      comment={comment}
+                      handleDelete={handleDeleteComment}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="w-full flex justify-center items-center">
+                  <CircularProgress className="!w-5 !h-5 text-[#007FFF]/60" />
+                </div>
+              )}
+
               {addComment ? (
                 <div>
                   <div

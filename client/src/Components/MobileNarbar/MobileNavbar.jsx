@@ -1,11 +1,10 @@
 import React from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowCreateProject } from "../../redux/project";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import HelpIcon from "@mui/icons-material/Help";
-import { setShowInvite, setShowTicket } from "../../redux/nonPersistant";
+import { setShowInvite, setShowTicket, setShowCreateProject } from "../../redux/nonPersistant";
 
 function MobileNavbar({ setShowProjectDialog }) {
   const dispatch = useDispatch();
@@ -34,7 +33,7 @@ function MobileNavbar({ setShowProjectDialog }) {
             onClick={() => {
               dispatch(setShowInvite(false));
               dispatch(setShowTicket({ value: false, type: "" }));
-              dispatch(setShowCreateProject(true));
+              dispatch(setShowCreateProject({ value: true, type: "create" }));
             }}
             className={`cursor-pointer py-2 px-4 justify-center flex items-center space-x-1 rounded-full ${
               theme === "dark"
@@ -51,7 +50,7 @@ function MobileNavbar({ setShowProjectDialog }) {
           onClick={() => {
             dispatch(setShowInvite(false));
             dispatch(setShowTicket({ value: true, type: "" }));
-            dispatch(setShowCreateProject(false));
+            dispatch(setShowCreateProject({ value: false, type: "" }));
           }}
           className={`cursor-pointer py-2 px-4 justify-center items-center flex space-x-2 rounded-full ${
             theme === "dark"
@@ -77,7 +76,7 @@ function MobileNavbar({ setShowProjectDialog }) {
         </button>
         <button
           onClick={() => {
-            dispatch(setShowCreateProject(false));
+            dispatch(setShowCreateProject({ value: false, type: "" }));
             dispatch(setShowInvite(true));
             dispatch(setShowTicket({ value: false, type: "" }));
           }}

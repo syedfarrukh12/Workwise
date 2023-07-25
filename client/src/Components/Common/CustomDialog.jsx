@@ -21,19 +21,20 @@ function CustomDialog({ open, setOpen, projects }) {
         <Dialog onClose={handleClose} open={open}>
           <DialogTitle>Select project to start work</DialogTitle>
           <List sx={{ pt: 0 }}>
-            {projects?.map((project) => (
-              <ListItem disableGutters disablePadding key={project._id}>
-                <ListItemButton
-                  onClick={() => {
-                    dispatch(setSelectedProject(project));
-                    setOpen(false);
-                  }}
-                  key={project}
-                >
-                  <ListItemText primary={project.name} />
-                </ListItemButton>
-              </ListItem>
-            ))}
+            {projects &&
+              projects?.map((project) => (
+                <ListItem disableGutters disablePadding key={project._id}>
+                  <ListItemButton
+                    onClick={() => {
+                      dispatch(setSelectedProject(project));
+                      window.location.reload();
+                    }}
+                    key={project}
+                  >
+                    <ListItemText primary={project.name} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
           </List>
         </Dialog>
       </div>

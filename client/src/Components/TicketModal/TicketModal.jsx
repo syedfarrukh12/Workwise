@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Backdrop,
   Divider,
   FormControl,
@@ -22,6 +23,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 
 function TicketModal() {
   const dispatch = useDispatch();
@@ -44,7 +46,7 @@ function TicketModal() {
           status: selectedTask.status,
           priority: selectedTask.priority,
           project: selectedTask.project,
-          dueDate: selectedTask.dueDate?.toISOString,
+          dueDate: selectedTask.dueDate,
           assignee: selectedTask.assignee,
           createdAt: selectedTask.createdAt,
           createdBy: selectedTask.createdBy,
@@ -122,7 +124,7 @@ function TicketModal() {
               type: "success",
             })
           );
-          console.log(response)
+          console.log(response);
           dispatch(setShowTicket({ value: false, type: "" }));
           dispatch(addTask(response.data));
         })
@@ -173,14 +175,14 @@ function TicketModal() {
               variant="outlined"
               onChange={handleChange}
               name="name"
-              placeholder="Name for project"
+              placeholder="Title for ticket"
               value={ticket.name}
             />
             <span>Ticket Description</span>
             <TextField
               id="outlined-basic"
               className="w-full"
-              placeholder="Description for project"
+              placeholder="Description for Ticket"
               size="small"
               variant="outlined"
               multiline
@@ -235,8 +237,8 @@ function TicketModal() {
                 <DemoContainer components={["DatePicker"]}>
                   <DatePicker
                     className="w-full"
-                    size="small"
-                    value={ticket.dueDate}
+                    disablePast
+                    value={dayjs(ticket.dueDate)}
                     onChange={(newValue) =>
                       setTicket((prev) => ({
                         ...prev,
@@ -249,23 +251,23 @@ function TicketModal() {
             </div>
 
             <span>Assignee</span>
-            {console.log(selectedProject)}
-            <FormControl>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                placeholder="Select Assignees"
-                onChange={handleChange}
-                size="small"
-                name="assignee"
-              >
-                {selectedProject.users.map((assignee) => (
-                  <MenuItem key={assignee._id} value={assignee._id}>
-                    {assignee.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Autocomplete
+              disablePortal
+              className="w-full"
+              multiple
+              name="users"
+              size="small"
+              id="combo-box-demo"
+              onChange={(event, newValue) =>
+                setTicket((prev) => ({
+                  ...prev,
+                  assignee: newValue.map((user) => user._id),
+                }))
+              }
+              options={selectedProject.users}
+              getOptionLabel={(user) => user.name}
+              renderInput={(params) => <TextField {...params} />}
+            />
           </div>
           <Divider />
           <div className="p-3 space-x-3 justify-end flex">
