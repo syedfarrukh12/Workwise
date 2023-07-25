@@ -82,3 +82,16 @@ export const lightColors = [
   "#008000", // Green
 ];
 
+export function formatDateToDayMonth(date) {
+  const months = [
+    "January", "February", "March", "April",
+    "May", "June", "July", "August",
+    "September", "October", "November", "December"
+  ];
+
+  const day = date.getDate();
+  const monthIndex = date.getMonth();
+  const month = months[monthIndex];
+
+  return `${day} ${month}`;
+}

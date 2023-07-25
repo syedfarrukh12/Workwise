@@ -57,7 +57,7 @@ export const createTask = async (req, res, next) => {
       createdBy,
     });
     await task.save();
-    await task.populate("assignee", "name")
+    await task.populate("assignee", "name");
     res.status(201).json(task);
   } catch (error) {
     console.error(error);
@@ -108,7 +108,7 @@ export const updateTask = async (req, res, next) => {
     if (assignee) {
       task.assignee = assignee;
     }
-
+    await task.populate("assignee")
     const updatedTask = await task.save();
 
     res.status(200).json(updatedTask);

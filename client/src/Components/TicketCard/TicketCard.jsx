@@ -6,7 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import FlagIcon from "@mui/icons-material/Flag";
-import { TaskPriority, formatDate, getInitials, lightColors } from "../utils";
+import { TaskPriority, formatDate, formatDateToDayMonth, getInitials, lightColors } from "../utils";
 import axios from "axios";
 import { API_URL } from "../Common/apiConfig";
 import { useDispatch, useSelector } from "react-redux";
@@ -135,12 +135,16 @@ function TicketCard({ task }) {
               </div>
             </div>
 
-            {task.dueDate && new Date() > new Date(task.dueDate) && (
-              <div className="px-1 cursor-default bg-red-600 text-[10px] text-white rounded-md ml-4 shadow-lg  hidden lg:flex">
-                overdue
-              </div>
-            )}
-            <div className="flex ml-10">
+            <Tooltip title={`This ticket is overdue`}>
+              {task.dueDate &&
+                new Date() > new Date(task.dueDate) &&
+                task.status !== "completed" && (
+                  <div className="px-1 mt-1 cursor-default bg-red-600 text-[10px] w-fit text-white ml-4 rounded-md shadow-lg  hidden lg:flex font-semibold">
+                    Due: {formatDateToDayMonth(new Date(task.dueDate))}
+                  </div>
+                )}
+            </Tooltip>
+            <div className="hidden md:flex ml-10">
               {task.assignee.length > 0 &&
                 task.assignee.map((item, index) => (
                   <div className="w-fit" key={index}>

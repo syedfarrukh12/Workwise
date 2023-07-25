@@ -142,7 +142,7 @@ function BoardList({ status, tasks, loading }) {
       {loading ? (
         <CardSkeleton />
       ) : (
-        <div className="flex flex-col flex-grow overflow-auto mt-2 ">
+        <div className="flex flex-col flex-grow overflow-auto">
           {groupedTasks[status]?.length > 0 ? (
             groupedTasks[status].map((task) => (
               <div key={task._id}>

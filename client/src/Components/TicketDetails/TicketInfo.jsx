@@ -57,14 +57,14 @@ function TicketInfo({ selectedTask }) {
             </div>
             <div>
               <div
-                className={`rounded-full px-2 border-2 ${
+                className={`rounded-full px-2 border-2 font-semibold ${
                   selectedTask.priority === TaskPriority.Low
-                    ? "text-[#388E3C] border-[#388E3C]"
+                    ? " border-[#388E3C]"
                     : selectedTask.priority === TaskPriority.Medium
-                    ? "text-[#FFEB3B] border-[#FFEB3B]"
+                    ? " border-[#FFEB3B]"
                     : selectedTask.priority === TaskPriority.High
-                    ? "text-[#FF9800] border-[#FF9800]"
-                    : "text-[#F44336] border-[#F44336]"
+                    ? " border-[#ff8c00]"
+                    : " border-[#F44336]"
                 }`}
               >
                 {camelCaseToSentenceCase(selectedTask.priority)}
