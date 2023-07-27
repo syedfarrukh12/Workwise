@@ -107,7 +107,7 @@ function Card({ task }) {
         ></div>
       </Tooltip>
 
-      <div className="flex flex-col p-3 justify-between hover:shadow-lg space-y-5">
+      <div className="flex flex-col p-3 justify-between hover:shadow-lg space-y-5 w-full">
         {/* Top section */}
         <div className="flex-grow">
           <div
