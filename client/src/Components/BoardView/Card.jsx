@@ -99,10 +99,10 @@ function Card({ task }) {
             task.priority === TaskPriority.Low
               ? "bg-[#388E3C]"
               : task.priority === TaskPriority.Medium
-              ? "bg-[#FFEB3B]"
+              ? "bg-[#ffcc00]"
               : task.priority === TaskPriority.High
-              ? "bg-[#FF9800]"
-              : "bg-[#F44336]"
+              ? "bg-[#ff8c00]"
+              : "bg-[#FF4500]"
           }`}
         ></div>
       </Tooltip>

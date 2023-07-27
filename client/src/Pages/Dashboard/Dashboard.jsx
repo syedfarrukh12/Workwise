@@ -100,7 +100,7 @@ const Dashboard = () => {
       </div>
 
       <div className="lg:ml-[15%]">
-        <div className="sticky top-[54px] z-10">
+        <div className="sticky top-[50px] md:top-[54px] z-10">
           <CustomNavigation setQuery={setQuery} query={query} />
         </div>
         {showCreateModal.value && (
