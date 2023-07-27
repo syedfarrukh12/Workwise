@@ -60,7 +60,7 @@ function TicketModal() {
           dueDate: "",
           assignee: [],
           createdAt: Date.now(),
-          createdBy: currentUser.id,
+          createdBy: currentUser._id,
         }
   );
 

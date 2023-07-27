@@ -11,6 +11,7 @@ export const nonPersistantSlice = createSlice({
     showTask: false,
     showCreateProject: { value: false, type: "" },
     projects: [],
+    showProfile: false,
   },
   reducers: {
     setOpenAlert: (state, action) => {
@@ -70,6 +71,9 @@ export const nonPersistantSlice = createSlice({
         projects: [...state.projects, ...action.payload],
       };
     },
+    setShowProfile: (state, action) => {
+      state.showProfile = action.payload;
+    },
   },
 });
 
@@ -86,6 +90,7 @@ export const {
   setShowCreateProject,
   addProjects,
   setProjects,
+  setShowProfile,
 } = nonPersistantSlice.actions;
 
 export default nonPersistantSlice.reducer;

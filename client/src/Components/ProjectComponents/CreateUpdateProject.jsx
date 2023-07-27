@@ -16,7 +16,7 @@ function EditProject() {
   const theme = localStorage.getItem("theme");
   const user = useSelector((state) => state.user.value);
   const [users, setUsers] = useState([]);
-  const userId = user.id;
+  const userId = user._id;
   const showCreateProject = useSelector(
     (state) => state.nonPersistant.showCreateProject
   );
@@ -31,7 +31,7 @@ function EditProject() {
           startDate: "",
           endDate: "",
           createdAt: Date.now(),
-          createdBy: user?.id,
+          createdBy: user?._id,
           users: [userId],
         }
       : {

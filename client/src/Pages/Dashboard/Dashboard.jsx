@@ -15,6 +15,7 @@ import BoardView from "../../Components/BoardView/BoardView";
 import TicketDetails from "../../Components/TicketDetails/TicketDetails";
 import { setProjects, setReduxTasks } from "../../redux/nonPersistant";
 import EditProject from "../../Components/ProjectComponents/CreateUpdateProject";
+import UserProfile from "../../Components/UserProfile/UserProfile";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -32,11 +33,14 @@ const Dashboard = () => {
   const showTicketModal = useSelector(
     (state) => state.nonPersistant.showTicket
   );
-
   const projects = useSelector((state) => state.nonPersistant.projects);
   const snackbar = useSelector((state) => state.nonPersistant.openAlert);
   const allTasks = useSelector((state) => state.nonPersistant.tasks);
   const boardView = useSelector((state) => state.projects.showBoardView);
+  const showUserProfile = useSelector(
+    (state) => state.nonPersistant.showProfile
+  );
+
   const [showProjectDialog, setShowProjectDialog] = useState(false);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
@@ -49,7 +53,7 @@ const Dashboard = () => {
     }
     if (!selectedProjectId) setShowProjectDialog(true);
     axios
-      .get(`${API_URL}/projects/${user.id}`)
+      .get(`${API_URL}/projects/${user._id}`)
       .then((response) => {
         dispatch(setProjects(response.data));
       })
@@ -88,12 +92,14 @@ const Dashboard = () => {
         message={snackbar.message}
       />
       {showTask && <TicketDetails />}
+      {showUserProfile && <UserProfile />}
 
       <div>
         <Sidebar setShowProjectDialog={setShowProjectDialog} />
       </div>
+
       <div className="lg:ml-[15%]">
-        <div className="sticky top-14 z-10">
+        <div className="sticky top-[54px] z-10">
           <CustomNavigation setQuery={setQuery} query={query} />
         </div>
         {showCreateModal.value && (
