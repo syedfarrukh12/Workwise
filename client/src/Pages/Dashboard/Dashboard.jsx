@@ -33,13 +33,14 @@ const Dashboard = () => {
   const showTicketModal = useSelector(
     (state) => state.nonPersistant.showTicket
   );
+  const showUserProfile = useSelector(
+    (state) => state.nonPersistant.showProfile
+  );
   const projects = useSelector((state) => state.nonPersistant.projects);
   const snackbar = useSelector((state) => state.nonPersistant.openAlert);
   const allTasks = useSelector((state) => state.nonPersistant.tasks);
   const boardView = useSelector((state) => state.projects.showBoardView);
-  const showUserProfile = useSelector(
-    (state) => state.nonPersistant.showProfile
-  );
+  
 
   const [showProjectDialog, setShowProjectDialog] = useState(false);
   const [query, setQuery] = useState("");
@@ -61,7 +62,7 @@ const Dashboard = () => {
         console.log(error);
       });
     //eslint-disable-next-line
-  }, []);
+  }, [selectedProjectId]);
 
   useEffect(() => {
     setLoading(true);
