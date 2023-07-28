@@ -9,14 +9,16 @@ import { setShowCreateProject } from "../../redux/nonPersistant";
 import { useDispatch, useSelector } from "react-redux";
 import { API_URL } from "../Common/apiConfig";
 import { addProjects, setSelectedProject } from "../../redux/project";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
+import ConfirmationModal from "../Common/ConfirmationModal";
 
 function EditProject() {
   const dispatch = useDispatch();
   const theme = localStorage.getItem("theme");
   const user = useSelector((state) => state.user.value);
   const [users, setUsers] = useState([]);
-  const userId = user.id;
+  const [showConfrimation, setShowConfrimation] = useState(false);
+  const userId = user._id;
   const showCreateProject = useSelector(
     (state) => state.nonPersistant.showCreateProject
   );
@@ -31,7 +33,7 @@ function EditProject() {
           startDate: "",
           endDate: "",
           createdAt: Date.now(),
-          createdBy: user?.id,
+          createdBy: user?._id,
           users: [userId],
         }
       : {
@@ -92,6 +94,18 @@ function EditProject() {
   const handleClose = () => {
     dispatch(setShowCreateProject({ value: false, type: "" }));
   };
+
+  const handleDeleteProject = () => {
+    axios
+      .delete(`${API_URL}/project/${selectedProject._id}`)
+      .then(() => {
+        setShowConfrimation(false);
+        dispatch(setSelectedProject({}));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <>
       <div>
@@ -102,6 +116,13 @@ function EditProject() {
             dispatch(setShowCreateProject({ value: false, type: "" }));
           }}
         >
+          {showConfrimation && (
+            <ConfirmationModal
+              title={`Do you really want to Delete the Project?`}
+              handleFunction={handleDeleteProject}
+              setShowConfrimation={setShowConfrimation}
+            />
+          )}
           <div
             onClick={(e) => e.stopPropagation()}
             className={`w-full lg:w-[50%] md:w-[80%] rounded-lg flex flex-col ${
@@ -121,8 +142,8 @@ function EditProject() {
               </div>
             </div>
             <Divider />
-            <div>
-              <div className="flex p-5 flex-col space-y-3 overflow-auto">
+            <div className="flex p-5 flex-col max-h-[500px] space-y-3 overflow-auto">
+              <div className=" space-y-3 ">
                 <span>Project Title</span>
                 <TextField
                   id="outlined-basic"
@@ -145,7 +166,7 @@ function EditProject() {
                   variant="outlined"
                   multiline
                   name="description"
-                  rows={4}
+                  rows={8}
                 />
                 <div className="lg:flex lg:space-x-5 space-y-3 lg:space-y-0">
                   <div className="w-full">
@@ -214,6 +235,33 @@ function EditProject() {
                   </div>
                 )}
               </div>
+              {showCreateProject.type !== "create" && (
+                <>
+                  <Divider />
+                  <div
+                    className={`p-5 rounded-lg ${
+                      theme === "dark" ? "bg-[#212f41]" : "bg-[#c9d3dc]"
+                    }`}
+                  >
+                    <div className="text-xl text-center text-red-500">
+                      Danger Zone
+                    </div>
+                    <div className="font-bold mt-3">
+                      Warning! : Actions done here can not be reversed!
+                    </div>
+                    <div className="flex justify-end">
+                      <button
+                        onClick={() => {
+                          setShowConfrimation(true);
+                        }}
+                        className="bg-red-700 hover:bg-red-800 rounded-xl px-8 py-3 text-white"
+                      >
+                        Delete this Project
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
             <div>
               <Divider />

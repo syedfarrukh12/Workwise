@@ -89,25 +89,25 @@ function Card({ task }) {
 
   return (
     <div
-      className={`rounded-lg w-48 h-52 border border-[#a4b7c6] mt-2 ${
+      className={`rounded-lg flex w-48 mt-2 ${
         theme === "dark" ? "bg-[#27374D]" : "bg-[#DDE6ED]"
       }`}
     >
       <Tooltip title={task.priority}>
         <div
-          className={`h-1 rounded-t-md mt-[2px] mx-[2px] justify-center items-center align-middle ${
+          className={`w-[5px] rounded-l-full justify-center items-center align-middle ${
             task.priority === TaskPriority.Low
               ? "bg-[#388E3C]"
               : task.priority === TaskPriority.Medium
-              ? "bg-[#FFEB3B]"
+              ? "bg-[#ffcc00]"
               : task.priority === TaskPriority.High
-              ? "bg-[#FF9800]"
-              : "bg-[#F44336]"
+              ? "bg-[#ff8c00]"
+              : "bg-[#FF4500]"
           }`}
         ></div>
       </Tooltip>
 
-      <div className="flex flex-col p-3 justify-between h-[97%] hover:shadow-lg">
+      <div className="flex flex-col p-3 justify-between hover:shadow-lg space-y-5 w-full">
         {/* Top section */}
         <div className="flex-grow">
           <div
@@ -128,7 +128,7 @@ function Card({ task }) {
                 </div>
               )}
           </Tooltip>
-          <div className="hidden md:flex mt-3">
+          <div className="hidden md:flex mt-5">
             {task.assignee.length > 0 &&
               task.assignee.map((item, index) => (
                 <div className="w-fit" key={index}>
@@ -152,7 +152,7 @@ function Card({ task }) {
 
         {/* Bottom section */}
         <div className="flex items-center justify-between">
-          <div className="!mt-2">
+          <div className="p-1 cursor-pointer hover:bg-white/50 rounded-full">
             {visible ? (
               <VisibilityIcon onClick={handleUpdateVisibility} />
             ) : (

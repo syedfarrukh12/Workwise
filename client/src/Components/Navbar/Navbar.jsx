@@ -9,9 +9,14 @@ import MenuItem from "@mui/material/MenuItem";
 import { useDispatch, useSelector } from "react-redux";
 import { resetStore } from "../../redux/store";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { setShowCreateProject } from "../../redux/nonPersistant";
+import {
+  setShowCreateProject,
+  setShowProfile,
+} from "../../redux/nonPersistant";
 import { getInitials } from "../utils";
 import { Divider } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 
 function Navbar({ setIsLoggedIn }) {
   const navigate = useNavigate();
@@ -28,7 +33,7 @@ function Navbar({ setIsLoggedIn }) {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -102,7 +107,15 @@ function Navbar({ setIsLoggedIn }) {
               >
                 <MenuItem>{currentUser.name}</MenuItem>
                 <Divider />
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    dispatch(setShowProfile(true));
+                    handleClose();
+                  }}
+                >
+                  <PersonIcon className="!w-5 !h-5 mr-2" />
+                  Profile
+                </MenuItem>
                 {(currentUser.role === "manager" ||
                   currentUser.role === "admin") && (
                   <MenuItem
@@ -113,6 +126,7 @@ function Navbar({ setIsLoggedIn }) {
                       handleClose();
                     }}
                   >
+                    <EditNoteIcon className="!w-5 !h-5 mr-2" />
                     Edit Project
                   </MenuItem>
                 )}

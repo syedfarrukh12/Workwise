@@ -4,7 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import HelpIcon from "@mui/icons-material/Help";
-import { setShowInvite, setShowTicket, setShowCreateProject } from "../../redux/nonPersistant";
+import GroupsIcon from "@mui/icons-material/Groups";
+import {
+  setShowInvite,
+  setShowTicket,
+  setShowCreateProject,
+} from "../../redux/nonPersistant";
+import { Tooltip } from "@mui/material";
 
 function Sidebar({ setShowProjectDialog }) {
   const dispatch = useDispatch();
@@ -22,28 +28,55 @@ function Sidebar({ setShowProjectDialog }) {
       } p-3 fixed top-14 pt-4 left-0 h-[93.5%] w-[15%] hidden lg:flex z-10 `}
     >
       <div className="space-y-3 justify-start flex flex-col">
-        <div
-          className="text-base text-center border p-3 rounded-lg cursor-pointer font-semibold"
-          onClick={() => setShowProjectDialog(true)}
+        <Tooltip
+          title={
+            <>
+              <div className="font-semibold text-xs">{selectedProject.name}</div>
+              <div>
+                If you have more than one project to manage <br /> you can
+                manage them from here
+              </div>
+            </>
+          }
+          about="Manage you project here"
         >
-          {selectedProject.name}
-        </div>
-        {(currentUser.role === "manager" || currentUser.role === "admin") && (
-          <button
-            onClick={() => {
-              dispatch(setShowInvite(false));
-              dispatch(setShowTicket({ value: false, type: "" }));
-              dispatch(setShowCreateProject({ value: true, type: "create" }));
-            }}
-            className={`cursor-pointer py-2 px-4 justify-center flex items-center space-x-1 rounded-full ${
-              theme === "dark"
-                ? "bg-white/10 hover:bg-white/20 :"
-                : "bg-black/10 hover:bg-black/20"
-            }`}
+          <div
+            className="text-base text-center border p-3 rounded-lg cursor-pointer font-semibold"
+            onClick={() => setShowProjectDialog(true)}
           >
-            <AddIcon style={{ width: "15px", height: "15px" }} />
-            <span className="hidden md:inline">Create Project</span>
-          </button>
+            {selectedProject.name}
+          </div>
+        </Tooltip>
+
+        {(currentUser.role === "manager" || currentUser.role === "admin") && (
+          <>
+            <button
+              onClick={() => {
+                dispatch(setShowInvite(false));
+                dispatch(setShowTicket({ value: false, type: "" }));
+                dispatch(setShowCreateProject({ value: true, type: "create" }));
+              }}
+              className={`cursor-pointer py-2 px-4 justify-center flex items-center space-x-1 rounded-full ${
+                theme === "dark"
+                  ? "bg-white/10 hover:bg-white/20 :"
+                  : "bg-black/10 hover:bg-black/20"
+              }`}
+            >
+              <AddIcon style={{ width: "15px", height: "15px" }} />
+              <span className="hidden md:inline">Create Project</span>
+            </button>
+
+            <button
+              className={`cursor-pointer py-2 px-4 justify-center items-center flex space-x-2 rounded-full ${
+                theme === "dark"
+                  ? "bg-white/10 hover:bg-white/20"
+                  : "bg-black/10 hover:bg-black/20"
+              }`}
+            >
+              <GroupsIcon style={{ width: "15px", height: "15px" }} />
+              <span className="hidden md:inline">Manage Teams</span>
+            </button>
+          </>
         )}
 
         {Object.keys(selectedProject).length !== 0 && (

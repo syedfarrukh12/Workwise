@@ -18,7 +18,7 @@ function CommentCard({ comment, handleDelete }) {
           <div className="font-semibold">
             {comment.author.name || currentUser.name}
           </div>
-          {comment.author._id === currentUser.id && (
+          {comment.author._id === currentUser._id && (
             <div
               className="hover:bg-white/40 cursor-pointer rounded-md px-1"
               onClick={() => handleDelete(comment._id)}

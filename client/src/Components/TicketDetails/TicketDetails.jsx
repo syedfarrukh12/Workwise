@@ -52,7 +52,7 @@ function TicketDetails() {
     setAddComment(false);
     const comment = {
       text: getTextFromEditor(),
-      author: currentUser.id,
+      author: currentUser._id,
       task: selectedTask._id,
     };
     axios

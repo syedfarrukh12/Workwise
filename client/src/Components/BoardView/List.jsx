@@ -51,7 +51,7 @@ function BoardList({ status, tasks, loading }) {
     const ticket = {
       name: title,
       status: status,
-      assignee: current_user.id,
+      assignee: current_user._id,
       project: selectedProject._id,
     };
     console.log(ticket);
