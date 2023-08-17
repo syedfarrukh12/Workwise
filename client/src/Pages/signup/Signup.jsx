@@ -56,7 +56,7 @@ const Signup = ({ setIsLoggedIn, type, propsEmail, teamId }) => {
         .then((response) => {
           console.log(response.data);
           localStorage.setItem("apiKey", response.data.token);
-          setTempUser(response.data.user._id);
+          setTempUser(response.data.user.email);
           dispatch(login(response.data.user));
           navigate("/");
           setIsLoggedIn(true);
@@ -74,9 +74,9 @@ const Signup = ({ setIsLoggedIn, type, propsEmail, teamId }) => {
   useEffect(() => {
     if (tempUser && type === "invite") {
       console.log("TEMP USER => ", tempUser);
-      const memberId = tempUser;
+      const email = tempUser;
       axios
-        .put(`${API_URL}/addmember/${teamId}`, { memberId })
+        .put(`${API_URL}/addmember/${teamId}`, { email })
         .then((res) => {
           dispatch(
             setOpenAlert({

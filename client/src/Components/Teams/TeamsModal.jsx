@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Autocomplete, Backdrop, Divider, TextField } from "@mui/material";
+import { Backdrop, Divider, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { API_URL } from "../Common/apiConfig";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import { setOpenAlert } from "../../redux/nonPersistant";
+import TeamCard from "./TeamCard";
+import CreateTeam from "./CreateTeam";
 
 function TeamsModal({ setShowTeamsModal, showTeamModal }) {
   const theme = localStorage.getItem("theme");
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.value);
   const [projects, setProjects] = useState([]);
+  const [teams, setTeams] = useState([]);
   const [team, setTeam] = useState({
     manager: currentUser._id,
     teamName: "",
@@ -19,15 +22,20 @@ function TeamsModal({ setShowTeamsModal, showTeamModal }) {
     members: [],
   });
   const [memberCount, setMemberCount] = useState(1);
+  const [createTeam, setCreateTeam] = useState(false);
+  const [editTeam, setEditTeam] = useState(false);
 
   useEffect(() => {
     axios.get(`${API_URL}/projects/${currentUser._id}`).then((res) => {
       setProjects(res.data);
     });
-  }, [currentUser._id]);
+
+    axios.get(`${API_URL}/teams/${currentUser._id}`).then((res) => {
+      setTeams(res.data);
+    });
+  }, [currentUser._id, showTeamModal]);
 
   const handleSubmit = () => {
-    console.log("HERE TEAM", team);
     axios
       .post(`${API_URL}/team`, team)
       .then((res) => {
@@ -98,57 +106,40 @@ function TeamsModal({ setShowTeamsModal, showTeamModal }) {
             </div>
           </div>
           <Divider />
-          <div className="p-3 space-y-3 max-h-[70vh] overflow-auto">
-            <div>
-              <span>Team Name</span>
-              <TextField
-                id="outlined-basic"
-                className="w-full"
-                size="small"
-                variant="outlined"
-                name="teamname"
-                onChange={(e) => {
-                  setTeam((prev) => ({
-                    ...prev,
-                    teamName: e.target.value,
-                  }));
-                }}
-                placeholder="Add a name for team"
-              />
-            </div>
-            <div>
-              <span>Project</span>
-              <Autocomplete
-                disablePortal
-                className="w-full"
-                multiple
-                name="projects"
-                size="small"
-                id="combo-box-demo"
-                onChange={(event, newValue) =>
-                  setTeam((prev) => ({
-                    ...prev,
-                    assignedProjects: newValue.map((project) => project._id),
-                  }))
-                }
-                options={projects}
-                getOptionLabel={(user) => user.name}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </div>
+          <div className="max-h-[70vh] overflow-auto">
+            {teams.length > 0 ? (
+              teams.map((team, index) => (
+                <TeamCard
+                  editTeam={editTeam}
+                  setEditTeam={setEditTeam}
+                  team={team}
+                  setShowTeamsModal={setShowTeamsModal}
+                  setCreateTeam={setCreateTeam}
+                />
+              ))
+            ) : (
+              <div className="text-center">You dont have any teams!</div>
+            )}
 
-            {memberFields}
-
-            <button
-              className="font-medium rounded-full py-1 px-2 cursor-pointer flex items-center"
-              onClick={() => {
-                setMemberCount(memberCount + 1);
-              }}
+            <div
+              onClick={() => setCreateTeam(true)}
+              className="p-2 hover:underline cursor-pointer rounded-full font-semibold w-fit flex items-center"
             >
               <AddOutlinedIcon className="!w-5 !h-5" />
-              <div>Add another member</div>
-            </button>
+              <div>Create Team</div>
+            </div>
+            {createTeam && (
+              <CreateTeam
+                setCreateTeam={setCreateTeam}
+                setTeam={setTeam}
+                projects={projects}
+                memberFields={memberFields}
+                setMemberCount={setMemberCount}
+                memberCount={memberCount}
+              />
+            )}
           </div>
+
           <Divider />
           <div className="p-3 space-x-3 justify-end flex">
             <button

@@ -9,9 +9,10 @@ import ConfirmationModal from "../../Components/Common/ConfirmationModal";
 //   TextField,
 // } from "@mui/material";
 import Signup from "../signup/Signup";
+import axios from "axios";
+import { API_URL } from "../../Components/Common/apiConfig";
 
 function InviteRegistration() {
-  // const theme = localStorage.getItem("theme");
   const navigate = useNavigate();
   const [agree, setAgree] = useState(false);
   const [open, setOpen] = useState(false);
@@ -31,6 +32,12 @@ function InviteRegistration() {
 
   function handleAgree() {
     setAgree(true);
+    axios
+      .put(`${API_URL}/addmember/${teamId}`, { email: email })
+      .then((res) => {})
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   return (
