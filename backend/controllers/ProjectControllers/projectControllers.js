@@ -3,25 +3,27 @@ import Project from "../../models/projectSchema.js";
 export const getProjects = async (req, res, next) => {
   try {
     const userId = req.params.userId;
-    const projectsCreatedByUser = await Project.find({
-      createdBy: userId,
-    }).populate("users", "name");
-    const projectsPartOfUser = await Project.find({ users: userId }).populate(
-      "users"
-    );
-    const allProjects = projectsCreatedByUser.concat(projectsPartOfUser);
-    const uniqueProjectsSet = new Set();
-    const uniqueProjects = [];
-    allProjects.forEach((project) => {
-      if (!uniqueProjectsSet.has(project._id.toString())) {
-        uniqueProjectsSet.add(project._id.toString());
-        uniqueProjects.push(project);
+    if (userId) {
+      const projectsCreatedByUser = await Project.find({
+        createdBy: userId,
+      }).populate("users", "name");
+      const projectsPartOfUser = await Project.find({ users: userId }).populate(
+        "users"
+      );
+      const allProjects = projectsCreatedByUser.concat(projectsPartOfUser);
+      const uniqueProjectsSet = new Set();
+      const uniqueProjects = [];
+      allProjects.forEach((project) => {
+        if (!uniqueProjectsSet.has(project._id.toString())) {
+          uniqueProjectsSet.add(project._id.toString());
+          uniqueProjects.push(project);
+        }
+      });
+      if (uniqueProjects) {
+        res.status(200).json(uniqueProjects);
+      } else {
+        res.status(200).json("Cannot Find Projects");
       }
-    });
-    if (uniqueProjects) {
-      res.status(200).json(uniqueProjects);
-    } else {
-      res.status(200).json("Cannot Find Projects");
     }
   } catch (error) {
     console.error(error);
