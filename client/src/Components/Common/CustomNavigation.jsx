@@ -5,7 +5,6 @@ import { TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useDispatch } from "react-redux";
 import { setShowBoardView } from "../../redux/project";
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 function CustomNavigation({ setQuery, query }) {
   const theme = localStorage.getItem("theme");
@@ -52,8 +51,8 @@ function CustomNavigation({ setQuery, query }) {
             <small className="text-xs">List</small>
           </div>
         </div>
-        
-        <div className="ml-auto w-full sm:w-fit flex justify-center items-center">
+
+        <div className="ml-auto w-full sm:w-fit">
           <TextField
             id="outlined-basic"
             className="w-full !mt-[2px]"
@@ -68,21 +67,6 @@ function CustomNavigation({ setQuery, query }) {
             }}
           />
         </div>
-        <div
-            onClick={() => {
-              dispatch(setShowBoardView(false))
-            }}
-            className="flex flex-col justify-center items-center cursor-pointer w-fit ml-2"
-          >
-            <div
-              className={`${
-                theme === "dark" ? "bg-[#182536]" : "bg-[#a5b9c9]"
-              } p-2 rounded-md flex items-center`}
-            >
-              <FilterAltIcon className={iconStyle} /><div className="text-sm lg:flex hidden ml-1">Filter</div>
-            </div>
-            
-          </div>
       </div>
     </>
   );

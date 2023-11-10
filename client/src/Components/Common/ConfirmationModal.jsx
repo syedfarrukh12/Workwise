@@ -27,7 +27,7 @@ function ConfirmationModal({ title, handleFunction, setShowConfrimation }) {
                 onClick={() => {
                   setShowConfrimation(false);
                 }}
-                className="px-4 text-white py-2 rounded-full bg-[#c61a1a]"
+                className="px-4 py-2 rounded-full bg-[#c61a1a]"
               >
                 Cancel
               </button>
@@ -35,7 +35,7 @@ function ConfirmationModal({ title, handleFunction, setShowConfrimation }) {
                 onClick={() => {
                   handleFunction();
                 }}
-                className="px-4 text-white py-2 rounded-full bg-[#3d6eae]"
+                className="px-4 py-2 rounded-full bg-[#3d6eae]"
               >
                 Confirm
               </button>
