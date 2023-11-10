@@ -187,7 +187,7 @@ function CustomAccordion({ tasks, loading }) {
                     theme === "dark" ? "bg-[#27374D]" : "bg-[#DDE6ED]"
                   }`}
                 >
-                  {groupedTasks[status]?.length}
+                  {tasksState[status]?.length}
                 </div>
                 {hover.value && hover.status === status && (
                   <button
