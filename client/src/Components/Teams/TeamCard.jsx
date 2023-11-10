@@ -121,7 +121,7 @@ function TeamCard({
                   <span className="text-xs opacity-50">({member.email})</span>
                 </div>
                 <div className="mt-1">
-                  <span className="text-xs opacity-80 text-black rounded-lg px-2 py-1 bg-white/50">
+                  <span className="text-xs opacity-80 text-black rounded-lg px-2 bg-white/50">
                     {camelCaseToSentenceCase(member.role)}
                   </span>
                 </div>
