@@ -10,11 +10,12 @@ import Select from "@mui/material/Select";
 import { isValidEmail } from "../../Components/utils.js";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/user.js";
+import { setOpenAlert } from "../../redux/nonPersistant.js";
 
-const Signup = ({ setIsLoggedIn }) => {
+const Signup = ({ setIsLoggedIn, type, propsEmail, teamId }) => {
   const navigate = useNavigate();
-  const theme = localStorage.getItem('theme')
-  const dispatch = useDispatch()
+  const theme = localStorage.getItem("theme");
+  const dispatch = useDispatch();
   const [confirmPassword, setConfirmPassword] = useState("");
   const [open, setOpen] = useState(false);
   const [snackbarContent, setSnackbarContent] = useState({
@@ -27,14 +28,15 @@ const Signup = ({ setIsLoggedIn }) => {
   const [user, setUser] = useState({
     name: "",
     username: "",
-    email: "",
+    email: type === "invite" ? propsEmail : "",
     password: "",
-    role: "",
+    role: type === "invite" ? "developer" | "qa" : "manager",
   });
+  const [tempUser, setTempUser] = useState("");
 
   useEffect(() => {
     if (localStorage.getItem("apiKey")) {
-      navigate("/");
+      if (type !== "invite") navigate("/");
     }
     //eslint-disable-next-line
   }, []);
@@ -54,10 +56,10 @@ const Signup = ({ setIsLoggedIn }) => {
         .then((response) => {
           console.log(response.data);
           localStorage.setItem("apiKey", response.data.token);
+          setTempUser(response.data.user.email);
+          dispatch(login(response.data.user));
           navigate("/");
           setIsLoggedIn(true);
-          const { name, email, username, role, _id } = response.data.user;
-          dispatch(login({ name, email, username, role, id: _id }));
         })
         .catch((error) => {
           console.log(error);
@@ -68,6 +70,28 @@ const Signup = ({ setIsLoggedIn }) => {
       return setPasswordError("Passwords do not match");
     }
   };
+
+  useEffect(() => {
+    if (tempUser && type === "invite") {
+      console.log("TEMP USER => ", tempUser);
+      const email = tempUser;
+      axios
+        .put(`${API_URL}/addmember/${teamId}`, { email })
+        .then((res) => {
+          dispatch(
+            setOpenAlert({
+              value: true,
+              message: "You are successfully added to the team.",
+              type: "success",
+            })
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    //eslint-disable-next-line
+  }, [tempUser, teamId, type]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -137,6 +161,8 @@ const Signup = ({ setIsLoggedIn }) => {
                 error={!!emailError && emailError}
                 type="email"
                 required={true}
+                value={propsEmail}
+                disabled={type === "invite"}
                 variant="outlined"
                 onChange={(e) => {
                   setUser((prevUser) => ({
@@ -176,50 +202,93 @@ const Signup = ({ setIsLoggedIn }) => {
                   setPasswordError("");
                 }}
               />
-              <FormControl fullWidth>
-                <InputLabel size="small" id="demo-simple-select-label">
-                  Role
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={user.role}
-                  required={true}
-                  size="small"
-                  label="Role"
-                  onChange={(e) => {
-                    setUser((prevUser) => ({
-                      ...prevUser,
-                      role: e.target.value,
-                    }));
+              {type === "invite" ? (
+                <FormControl fullWidth>
+                  <InputLabel size="small" id="demo-simple-select-label">
+                    Role
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={user.role}
+                    required={true}
+                    size="small"
+                    label="Role"
+                    onChange={(e) => {
+                      setUser((prevUser) => ({
+                        ...prevUser,
+                        role: e.target.value,
+                      }));
+                    }}
+                  >
+                    <MenuItem value={"developer"}>Developer</MenuItem>
+                    <MenuItem value={"qa"}>QA</MenuItem>
+                  </Select>
+                </FormControl>
+              ) : (
+                <FormControl fullWidth>
+                  <InputLabel size="small" id="demo-simple-select-label">
+                    Role
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={user.role}
+                    required={true}
+                    size="small"
+                    label="Role"
+                    onChange={(e) => {
+                      setUser((prevUser) => ({
+                        ...prevUser,
+                        role: e.target.value,
+                      }));
+                    }}
+                  >
+                    <MenuItem value={"manager"}>Manager</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
+
+              {type === "invite" ? (
+                <button
+                  className={`rounded-full p-2 ${
+                    theme === "dark"
+                      ? "bg-[#DDE6ED] text-[#27374D] hover:bg-[#a9b3bb]"
+                      : "bg-[#27374D] text-[#DDE6ED] hover:bg-[#43556f]"
+                  }`}
+                  onClick={() => {
+                    handleSignup();
                   }}
                 >
-                  <MenuItem value={"manager"}>Manager</MenuItem>
-                  <MenuItem value={"developer"}>Developer</MenuItem>
-                  <MenuItem value={"qa"}>QA</MenuItem>
-                </Select>
-              </FormControl>
-              <button
-                className={`rounded-full p-2 ${
-                  theme === "dark"
-                    ? "bg-[#DDE6ED] text-[#27374D] hover:bg-[#a9b3bb]"
-                    : "bg-[#27374D] text-[#DDE6ED] hover:bg-[#43556f]"
-                }`}
-                onClick={handleSignup}
-              >
-                Create Account
-              </button>
-              <div>
-                Already have account?{" "}
-                <Link
-                  className={`underline ${
-                    theme === "dark" ? " text-[#DDE6ED] hover:text-[#a9b3bb]" : " text-[#27374D] hover:text-[#16253c]"
+                  Continue
+                </button>
+              ) : (
+                <button
+                  className={`rounded-full p-2 ${
+                    theme === "dark"
+                      ? "bg-[#DDE6ED] text-[#27374D] hover:bg-[#a9b3bb]"
+                      : "bg-[#27374D] text-[#DDE6ED] hover:bg-[#43556f]"
                   }`}
-                  to="/login"
+                  onClick={handleSignup}
                 >
-                  Log in
-                </Link>
-              </div>
+                  Create Account
+                </button>
+              )}
+              {type !== "invite" && (
+                <div>
+                  Already have account?{" "}
+                  <Link
+                    className={`underline ${
+                      theme === "dark"
+                        ? " text-[#DDE6ED] hover:text-[#a9b3bb]"
+                        : " text-[#27374D] hover:text-[#16253c]"
+                    }`}
+                    to="/login"
+                  >
+                    Log in
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -16,6 +16,7 @@ import TicketDetails from "../../Components/TicketDetails/TicketDetails";
 import { setProjects, setReduxTasks } from "../../redux/nonPersistant";
 import EditProject from "../../Components/ProjectComponents/CreateUpdateProject";
 import UserProfile from "../../Components/UserProfile/UserProfile";
+import TeamsModal from "../../Components/Teams/TeamsModal";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -40,13 +41,14 @@ const Dashboard = () => {
   const snackbar = useSelector((state) => state.nonPersistant.openAlert);
   const allTasks = useSelector((state) => state.nonPersistant.tasks);
   const boardView = useSelector((state) => state.projects.showBoardView);
-  
 
+  
   const [showProjectDialog, setShowProjectDialog] = useState(false);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const showBoardView = boardView ?? false;
   const showTask = useSelector((state) => state.nonPersistant.showTask);
+  const [showTeamModal, setShowTeamsModal] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem("apiKey")) {
@@ -66,6 +68,11 @@ const Dashboard = () => {
 
   useEffect(() => {
     setLoading(true);
+    if (selectedProjectId) fetchTasks();
+    //eslint-disable-next-line
+  }, [selectedProjectId]);
+
+  const fetchTasks = () => {
     axios
       .get(`${API_URL}/tasks/${selectedProjectId}`)
       .then((response) => {
@@ -75,8 +82,7 @@ const Dashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-    //eslint-disable-next-line
-  }, [selectedProjectId]);
+  };
 
   const filteredTasks = allTasks?.filter((task) => {
     return task.name?.toLowerCase().includes(query.toLocaleLowerCase());
@@ -92,11 +98,18 @@ const Dashboard = () => {
         type={snackbar.type}
         message={snackbar.message}
       />
+      <TeamsModal
+        setShowTeamsModal={setShowTeamsModal}
+        showTeamModal={showTeamModal}
+      />
       {showTask && <TicketDetails />}
       {showUserProfile && <UserProfile />}
 
       <div>
-        <Sidebar setShowProjectDialog={setShowProjectDialog} />
+        <Sidebar
+          setShowProjectDialog={setShowProjectDialog}
+          setShowTeamsModal={setShowTeamsModal}
+        />
       </div>
 
       <div className="lg:ml-[15%]">
