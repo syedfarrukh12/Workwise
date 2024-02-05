@@ -10,6 +10,9 @@ const userSchema = new Schema({
     enum: ["admin", "manager", "qa", "developer"],
     default: "qa",
   },
+  about: {
+    type: String,
+  }
 });
 
 const User = model("User", userSchema);

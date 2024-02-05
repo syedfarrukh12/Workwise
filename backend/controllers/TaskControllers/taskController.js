@@ -56,17 +56,9 @@ export const createTask = async (req, res, next) => {
       createdAt,
       createdBy,
     });
-    task
-      .save()
-      .then(() => {
-        res.status(200).json(task);
-      })
-      .catch((error) => {
-        console.log(error);
-        res
-          .status(500)
-          .json({ message: "An error occurred while creating task" });
-      });
+    await task.save();
+    await task.populate("assignee", "name");
+    res.status(201).json(task);
   } catch (error) {
     console.error(error);
     res.status(500).send("An error occurred while creating tasks");
@@ -116,7 +108,7 @@ export const updateTask = async (req, res, next) => {
     if (assignee) {
       task.assignee = assignee;
     }
-
+    await task.populate("assignee")
     const updatedTask = await task.save();
 
     res.status(200).json(updatedTask);
