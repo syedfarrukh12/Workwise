@@ -110,6 +110,7 @@ function TeamsModal({ setShowTeamsModal, showTeamModal }) {
             {teams.length > 0 ? (
               teams.map((team, index) => (
                 <TeamCard
+                  key={team._id}
                   editTeam={editTeam}
                   setEditTeam={setEditTeam}
                   team={team}
