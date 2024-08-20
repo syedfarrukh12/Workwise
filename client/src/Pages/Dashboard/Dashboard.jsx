@@ -2,25 +2,31 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../Components/Common/apiConfig";
-
 import { useDispatch, useSelector } from "react-redux";
-import { addProjects } from "../../redux/project";
-import CreateProject from "../../Components/CreateProject/CreateProject";
 import InviteModal from "../../Components/InviteModal/InviteModal";
 import CustomSnackbar from "../../Components/Common/CustomSnackbar";
 import TicketModal from "../../Components/TicketModal/TicketModal";
 import CustomAccordion from "../../Components/Common/CustomAccordion";
 import MobileNavbar from "../../Components/MobileNarbar/MobileNavbar";
+import Sidebar from "../../Components/Sidebar/Sidebar";
+import CustomDialog from "../../Components/Common/CustomDialog";
+import CustomNavigation from "../../Components/Common/CustomNavigation";
+import BoardView from "../../Components/BoardView/BoardView";
+import TicketDetails from "../../Components/TicketDetails/TicketDetails";
+import { setProjects, setReduxTasks } from "../../redux/nonPersistant";
+import EditProject from "../../Components/ProjectComponents/CreateUpdateProject";
+import UserProfile from "../../Components/UserProfile/UserProfile";
+import TeamsModal from "../../Components/Teams/TeamsModal";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.value);
   const showCreateModal = useSelector(
-    (state) => state.projects.showCreateProject
+    (state) => state.nonPersistant.showCreateProject
   );
-  const selectedProject = useSelector(
-    (state) => state.projects.selectedProject._id
+  const selectedProjectId = useSelector(
+    (state) => state.projects.selectedProject?._id
   );
   const showInviteModal = useSelector(
     (state) => state.nonPersistant.showInvite
@@ -28,63 +34,118 @@ const Dashboard = () => {
   const showTicketModal = useSelector(
     (state) => state.nonPersistant.showTicket
   );
+  const showUserProfile = useSelector(
+    (state) => state.nonPersistant.showProfile
+  );
+  const projects = useSelector((state) => state.nonPersistant.projects);
   const snackbar = useSelector((state) => state.nonPersistant.openAlert);
   const allTasks = useSelector((state) => state.nonPersistant.tasks);
-  const [tasks, setTasks] = useState([]);
+  const boardView = useSelector((state) => state.projects.showBoardView);
+
+  
+  const [showProjectDialog, setShowProjectDialog] = useState(false);
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+  const showBoardView = boardView ?? false;
+  const showTask = useSelector((state) => state.nonPersistant.showTask);
+  const [showTeamModal, setShowTeamsModal] = useState(false);
 
   useEffect(() => {
     if (!localStorage.getItem("apiKey")) {
       navigate("/login");
     }
+    if (!selectedProjectId) setShowProjectDialog(true);
     axios
-      .get(`${API_URL}/projects/${user.id}`)
+      .get(`${API_URL}/projects/${user._id}`)
       .then((response) => {
-        dispatch(addProjects(response.data));
+        dispatch(setProjects(response.data));
       })
       .catch((error) => {
         console.log(error);
       });
     //eslint-disable-next-line
-  }, []);
+  }, [selectedProjectId]);
 
   useEffect(() => {
+    setLoading(true);
+    if (selectedProjectId) fetchTasks();
+    //eslint-disable-next-line
+  }, [selectedProjectId]);
+
+  const fetchTasks = () => {
     axios
-      .get(`${API_URL}/tasks/${selectedProject}`)
+      .get(`${API_URL}/tasks/${selectedProjectId}`)
       .then((response) => {
-        setTasks(response.data);
+        dispatch(setReduxTasks(response.data));
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
       });
-    //eslint-disable-next-line
-  }, [selectedProject, allTasks]);
+  };
+
+  const filteredTasks = allTasks?.filter((task) => {
+    return task.name?.toLowerCase().includes(query.toLocaleLowerCase());
+  });
 
   return (
-    <>
-      <div className="w-full">
-        <MobileNavbar />
+    <div className="h-screen overflow-auto">
+      <div className="w-full mt-14">
+        <MobileNavbar setShowProjectDialog={setShowProjectDialog} />
       </div>
-      <div className="">
-        <CustomSnackbar
-          value={snackbar.value}
-          type={snackbar.type}
-          message={snackbar.message}
+      <CustomSnackbar
+        value={snackbar.value}
+        type={snackbar.type}
+        message={snackbar.message}
+      />
+      <TeamsModal
+        setShowTeamsModal={setShowTeamsModal}
+        showTeamModal={showTeamModal}
+      />
+      {showTask && <TicketDetails />}
+      {showUserProfile && <UserProfile />}
+
+      <div>
+        <Sidebar
+          setShowProjectDialog={setShowProjectDialog}
+          setShowTeamsModal={setShowTeamsModal}
         />
-        {showCreateModal && (
+      </div>
+
+      <div className="lg:ml-[15%]">
+        <div className="sticky top-[50px] md:top-[54px] z-10">
+          <CustomNavigation setQuery={setQuery} query={query} />
+        </div>
+        {showCreateModal.value && (
           <div>
-            <CreateProject />
+            <EditProject />
           </div>
         )}
-        <div className="-mt-16 lg:mt-0">
+
+        <div className="lg:mt-0">
           {showInviteModal && <InviteModal />}
           {showTicketModal.value && <TicketModal />}
         </div>
 
-        <div className="p-3 mt-14 lg:mt-0">
-          <CustomAccordion tasks={tasks} />
+        <div className="lg:mt-0">
+          <div>
+            <CustomDialog
+              open={showProjectDialog}
+              setOpen={setShowProjectDialog}
+              projects={projects}
+            />
+          </div>
+
+          <div className="mt-3">
+            {showBoardView ? (
+              <BoardView tasks={filteredTasks} loading={loading} />
+            ) : (
+              <CustomAccordion tasks={filteredTasks} loading={loading} />
+            )}
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

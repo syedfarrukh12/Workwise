@@ -9,8 +9,8 @@ import {
 const router = express.Router();
 
 router.get("/comments/:taskId", getComments);
-router.put("/comments/:taskId/:commentId", editComment);
-router.delete("/comments/:taskId/:commentId", deleteComment);
+router.put("/comment/:commentId", editComment);
+router.delete("/comment/:commentId", deleteComment);
 router.post("/comment", createComment);
 
 export default router;

@@ -1,23 +1,21 @@
 import React from "react";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedProject, setShowCreateProject } from "../../redux/project";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import HelpIcon from "@mui/icons-material/Help";
-import { setShowInvite, setShowTicket } from "../../redux/nonPersistant";
+import GroupsIcon from "@mui/icons-material/Groups";
+import {
+  setShowInvite,
+  setShowTicket,
+  setShowCreateProject,
+} from "../../redux/nonPersistant";
+import { Tooltip } from "@mui/material";
 
-function Sidebar() {
+function Sidebar({ setShowProjectDialog, setShowTeamsModal }) {
   const dispatch = useDispatch();
-  const projects = useSelector((state) => state.projects.projects);
   const currentUser = useSelector((state) => state.user.value);
   const theme = localStorage.getItem("theme");
-
-  const handleProjectChange = (event) => {
-    const selectedProject = event.target.value;
-    dispatch(setSelectedProject(selectedProject));
-  };
 
   const selectedProject = useSelector(
     (state) => state.projects.selectedProject
@@ -25,62 +23,82 @@ function Sidebar() {
 
   return (
     <div
-      className={`flex flex-col text-sm space-y-3 ${
+      className={`flex flex-col text-sm shadow-lg space-y-3 ${
         theme === "dark" ? "bg-[#20324c]" : "bg-[#eaf2f8]"
-      } p-3 fixed top-14 pt-4 left-0 h-[93.5%] w-[15%] hidden lg:flex`}
+      } p-3 fixed top-14 pt-4 left-0 h-[93.5%] w-[15%] hidden lg:flex z-10 `}
     >
       <div className="space-y-3 justify-start flex flex-col">
-        <FormControl>
-          <InputLabel id="demo-simple-select-label">Projects</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={selectedProject}
-            label="Project"
-            size="small"
-            onChange={handleProjectChange}
+        <Tooltip
+          title={
+            <>
+              <div className="font-semibold text-xs">
+                {selectedProject.name}
+              </div>
+              <div>
+                If you have more than one project to manage <br /> you can
+                manage them from here
+              </div>
+            </>
+          }
+          about="Manage you project here"
+        >
+          <div
+            className="text-base text-center border p-3 rounded-lg cursor-pointer font-semibold"
+            onClick={() => setShowProjectDialog(true)}
           >
-            {projects &&
-              projects.map((project) => (
-                <MenuItem key={project._id} value={project}>
-                  {project.name}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
-        {currentUser.role === "manager" && (
+            {selectedProject.name}
+          </div>
+        </Tooltip>
+
+        {(currentUser.role === "manager" || currentUser.role === "admin") && (
+          <>
+            <button
+              onClick={() => {
+                dispatch(setShowInvite(false));
+                dispatch(setShowTicket({ value: false, type: "" }));
+                dispatch(setShowCreateProject({ value: true, type: "create" }));
+              }}
+              className={`cursor-pointer py-2 px-4 justify-center flex items-center space-x-1 rounded-full ${
+                theme === "dark"
+                  ? "bg-white/10 hover:bg-white/20 :"
+                  : "bg-black/10 hover:bg-black/20"
+              }`}
+            >
+              <AddIcon style={{ width: "15px", height: "15px" }} />
+              <span className="hidden md:inline">Create Project</span>
+            </button>
+
+            <button
+              onClick={() => setShowTeamsModal(true)}
+              className={`cursor-pointer py-2 px-4 justify-center items-center flex space-x-2 rounded-full ${
+                theme === "dark"
+                  ? "bg-white/10 hover:bg-white/20"
+                  : "bg-black/10 hover:bg-black/20"
+              }`}
+            >
+              <GroupsIcon style={{ width: "15px", height: "15px" }} />
+              <span className="hidden md:inline">Manage Teams</span>
+            </button>
+          </>
+        )}
+
+        {Object.keys(selectedProject).length !== 0 && (
           <button
             onClick={() => {
               dispatch(setShowInvite(false));
-              dispatch(setShowTicket({value:false, type: ''}));
-              dispatch(setShowCreateProject(true));
+              dispatch(setShowTicket({ value: true, type: "" }));
+              dispatch(setShowCreateProject({ value: false, type: "" }));
             }}
-            className={`cursor-pointer py-2 px-4 justify-center flex items-center space-x-1 rounded-full ${
+            className={`cursor-pointer py-2 px-4 justify-center items-center flex space-x-2 rounded-full ${
               theme === "dark"
-                ? "bg-white/10 hover:bg-white/20 :"
+                ? "bg-white/10 hover:bg-white/20"
                 : "bg-black/10 hover:bg-black/20"
             }`}
           >
-            <AddIcon style={{ width: "15px", height: "15px" }} />
-            <span className="hidden md:inline">Create Project</span>
+            <AssignmentIcon style={{ width: "15px", height: "15px" }} />
+            <span className="hidden md:inline">Add Ticket</span>
           </button>
         )}
-
-        <button
-          onClick={() => {
-            dispatch(setShowInvite(false));
-            dispatch(setShowTicket({value:true, type: ''}));
-            dispatch(setShowCreateProject(false));
-          }}
-          className={`cursor-pointer py-2 px-4 justify-center items-center flex space-x-2 rounded-full ${
-            theme === "dark"
-              ? "bg-white/10 hover:bg-white/20 :"
-              : "bg-black/10 hover:bg-black/20"
-          }`}
-        >
-          <AssignmentIcon style={{ width: "15px", height: "15px" }} />
-          <span className="hidden md:inline">Add Ticket</span>
-        </button>
       </div>
       <div className="flex-grow" />
       <div className="space-y-3 justify-end flex flex-col">
@@ -96,9 +114,9 @@ function Sidebar() {
         </button>
         <button
           onClick={() => {
-            dispatch(setShowCreateProject(false));
+            dispatch(setShowCreateProject({ value: false, type: "" }));
             dispatch(setShowInvite(true));
-            dispatch(setShowTicket({value:false, type: ''}));
+            dispatch(setShowTicket({ value: false, type: "" }));
           }}
           className={`cursor-pointer py-2 px-4 justify-center items-center flex space-x-2 rounded-full ${
             theme === "dark"

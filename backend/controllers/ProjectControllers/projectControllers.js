@@ -2,14 +2,29 @@ import Project from "../../models/projectSchema.js";
 
 export const getProjects = async (req, res, next) => {
   try {
-    const userId = req.params.userId
-    const projects = await Project.find({createdBy: userId});
-    if (projects){
-      res.status(200).json(projects);
-    }else{
-      res.status(200).json("Cannot Find Projects");
+    const userId = req.params.userId;
+    if (userId) {
+      const projectsCreatedByUser = await Project.find({
+        createdBy: userId,
+      }).populate("users", "name");
+      const projectsPartOfUser = await Project.find({ users: userId }).populate(
+        "users"
+      );
+      const allProjects = projectsCreatedByUser.concat(projectsPartOfUser);
+      const uniqueProjectsSet = new Set();
+      const uniqueProjects = [];
+      allProjects.forEach((project) => {
+        if (!uniqueProjectsSet.has(project._id.toString())) {
+          uniqueProjectsSet.add(project._id.toString());
+          uniqueProjects.push(project);
+        }
+      });
+      if (uniqueProjects) {
+        res.status(200).json(uniqueProjects);
+      } else {
+        res.status(200).json("Cannot Find Projects");
+      }
     }
-    
   } catch (error) {
     console.error(error);
     res.status(500).send("An error occurred while retrieving projects");
@@ -20,7 +35,8 @@ export const getProject = async (req, res, next) => {
   const id = req.params.id;
   const userId = req.params.userId;
 
-  Project.findOne({_id: id, createdBy: userId})
+  Project.findOne({ _id: id, createdBy: userId })
+    .populate("users", "name")
     .then((project) => {
       if (!project) {
         res.status(404).json("Project not found");
@@ -36,15 +52,14 @@ export const getProject = async (req, res, next) => {
 
 export const createProject = async (req, res, next) => {
   const { name, description, createdBy, users } = req.body;
-  console.log(name, description, createdBy)
-  try{
+  try {
     const project = new Project({
       name,
       description,
       createdBy,
-      users
+      users,
     });
-  
+
     project
       .save()
       .then((savedProject) => {
@@ -54,10 +69,9 @@ export const createProject = async (req, res, next) => {
         console.error(error);
         res.status(500).json("An error occurred while creating the project");
       });
-  }catch(error){
-    res.status(500).send("Something went wrong")
+  } catch (error) {
+    res.status(500).send("Something went wrong");
   }
-  
 };
 
 export const updateProject = (req, res, next) => {
@@ -84,7 +98,6 @@ export const updateProject = (req, res, next) => {
 
 export const deleteProject = (req, res, next) => {
   const id = req.params.id;
-  console.log(id)
 
   Project.findByIdAndDelete(id)
     .then((project) => {
