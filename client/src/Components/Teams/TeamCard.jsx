@@ -7,6 +7,8 @@ import { useDispatch } from "react-redux";
 import { setOpenAlert } from "../../redux/nonPersistant";
 import { camelCaseToSentenceCase } from "../utils";
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+
 function TeamCard({
   editTeam,
   setEditTeam,
@@ -14,6 +16,7 @@ function TeamCard({
   setShowTeamsModal,
   setCreateTeam,
 }) {
+
   const theme = localStorage.getItem("theme");
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
@@ -69,6 +72,7 @@ function TeamCard({
           );
         });
   };
+
   return (
     <>
       <div className="p-3">
@@ -79,7 +83,9 @@ function TeamCard({
           }`}
         >
           <div className="flex items-center">
-            <ExpandMoreOutlinedIcon />
+           
+           {showList ? <ExpandLessIcon /> : <ExpandMoreOutlinedIcon />}    
+
             <div>{team.teamName}</div>
             <div
               className={`px-2 py-1 ml-2 rounded-full ${

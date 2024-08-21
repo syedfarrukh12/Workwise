@@ -15,6 +15,7 @@ import teamRoute from "./routes/teams/teams.js";
 
 
 const PORT = 5000;
+const HOST = '0.0.0.0';
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -30,6 +31,6 @@ app.use(taskRoute);
 app.use(commentRoute);
 app.use(teamRoute);
 
-app.listen(PORT, (req, res) => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(PORT, HOST, (req, res) => {
+  console.log(`Server is running on host ${HOST} : ${PORT}`);
 });

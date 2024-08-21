@@ -1,6 +1,6 @@
 import { connect } from 'mongoose';
 import dotenv from 'dotenv';
-dotenv.config({ path: './config.env' });
+dotenv.config({ path: './.env' });
 
 const connection_string = process.env.CONNECTION_STRING
 connect(connection_string).then(()=>{
